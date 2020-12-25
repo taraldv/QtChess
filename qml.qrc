@@ -1,5 +1,18 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Board.qml</file>
+        <file>img/bB.png</file>
+        <file>img/bK.png</file>
+        <file>img/bN.png</file>
+        <file>img/bP.png</file>
+        <file>img/bQ.png</file>
+        <file>img/bR.png</file>
+        <file>img/wB.png</file>
+        <file>img/wK.png</file>
+        <file>img/wN.png</file>
+        <file>img/wP.png</file>
+        <file>img/wQ.png</file>
+        <file>img/wR.png</file>
     </qresource>
 </RCC>
