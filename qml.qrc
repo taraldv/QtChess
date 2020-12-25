@@ -14,5 +14,6 @@
         <file>img/wP.png</file>
         <file>img/wQ.png</file>
         <file>img/wR.png</file>
+        <file>img/blank.png</file>
     </qresource>
 </RCC>
