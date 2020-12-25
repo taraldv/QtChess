@@ -1,8 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.12
 
 Rectangle {
     width: 100*8; height: 100*8
-
     Component {
         id: squareDelegate
         Rectangle {
@@ -22,10 +21,11 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        parent.parent.color = "red";
-                       // publicTorrrentTitle = title;
-                       // publicTorrentId = torrentId;
-                       // fileDialog.open();
+                        console.log(letter+number)
+                        // parent.parent.border.color = "red";
+                        // publicTorrrentTitle = title;
+                        // publicTorrentId = torrentId;
+                        // fileDialog.open();
                         //torrentHandler.downloadFile(torrentId, user.getTorrentPass());
                     }
                 }
@@ -36,7 +36,7 @@ Rectangle {
 
     GridView {
         //cellHeight: 60
-       // cellWidth: 60
+        // cellWidth: 60
         anchors.fill: parent
         model: boardModel
         delegate: squareDelegate
@@ -44,6 +44,7 @@ Rectangle {
         // focus: true
     }
     Component.onCompleted: {
+        console.log(cppBoard.getPiecePNGList());
         boardModel.buildBoard();
     }
 
@@ -53,11 +54,16 @@ Rectangle {
 
     ListModel {
         id: boardModel
-        function buildBoard(){
+        function buildBoard(list){
             boardModel.clear();
             var white = "bisque";
             var black = "saddlebrown";
-            var pngSource = "blank"
+            var pngSource = "blank";
+            /*
+            Loop iteration:
+                A8,B8,C8,D8,E8,F8,G8,H8,A7...
+            */
+            var index = 0;
             for(var row=8;row>0;row--){
                 for(var column=0;column<8;column++){
                     //Red for undefined square
@@ -77,8 +83,10 @@ Rectangle {
                     }
                     //Big letter 'A' in ascii is 65
                     var letter = String.fromCharCode(column+65);
+                    console.log(letter+row)
                     var element = createListElement(row,letter,color, pngSource);
                     append(element);
+                    index++;
                 }
             }
         }

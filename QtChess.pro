@@ -1,4 +1,4 @@
-QT += quick
+QT += quick multimedia core network
 
 CONFIG += c++11
 
@@ -7,7 +7,15 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        bishop.cpp \
+        board.cpp \
+        king.cpp \
+        knight.cpp \
+        main.cpp \
+        pawn.cpp \
+        piece.cpp \
+        queen.cpp \
+        rook.cpp
 
 RESOURCES += qml.qrc
 
@@ -21,3 +29,13 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    bishop.h \
+    board.h \
+    king.h \
+    knight.h \
+    pawn.h \
+    piece.h \
+    queen.h \
+    rook.h
