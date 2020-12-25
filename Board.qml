@@ -44,7 +44,6 @@ Rectangle {
         // focus: true
     }
     Component.onCompleted: {
-        console.log(cppBoard.getPiecePNGList());
         boardModel.buildBoard();
     }
 
@@ -58,7 +57,8 @@ Rectangle {
             boardModel.clear();
             var white = "bisque";
             var black = "saddlebrown";
-            var pngSource = "blank";
+           // var pngSource = "blank";
+            var currentBoardPiecesArray = cppBoard.getPiecePNGList();
             /*
             Loop iteration:
                 A8,B8,C8,D8,E8,F8,G8,H8,A7...
@@ -83,8 +83,7 @@ Rectangle {
                     }
                     //Big letter 'A' in ascii is 65
                     var letter = String.fromCharCode(column+65);
-                    console.log(letter+row)
-                    var element = createListElement(row,letter,color, pngSource);
+                    var element = createListElement(row,letter,color, currentBoardPiecesArray[index]);
                     append(element);
                     index++;
                 }

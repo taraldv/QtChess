@@ -67,7 +67,6 @@ QVariantList Board::getPiecePNGList(){
     QVariantList output;
     for(int i=0;i<64;i++){
         if(pieceArray[i]){
-            qDebug() << pieceArray[i];
             output.append(pieceArray[i]->getName());
         } else {
             output.append("blank");
