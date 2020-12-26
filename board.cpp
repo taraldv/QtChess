@@ -1,7 +1,64 @@
 #include "board.h"
 
-Board::Board(QObject *parent) : QObject(parent)
-{
+Board::Board(QObject *parent) : QObject(parent){
+    restart();
+}
+
+
+
+QVariantList Board::getPiecePNGList(){
+    QVariantList output;
+    for(int i=0;i<64;i++){
+        if(pieceArray[i]){
+            output.append(pieceArray[i]->getName());
+        } else {
+            output.append("blank");
+        }
+    }
+    return output;
+}
+/**
+ * @brief Board::isMoveLegal Checks if the chess move is legal.
+ * Needs to verify a list of things:
+ * Is square free, if yes then check if movement is legal.
+ * If no, check if piece is friendly or hostile.
+ * If piece is hostile, check if take is legal.
+ * @param from
+ * @param to
+ * @return
+ */
+
+bool Board::isMoveLegal(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+    return pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray);
+    /*if(isSquareFree(to)){
+        return isMovementLegal(from,to);
+    } else {
+        if(isHostile(from, to)){
+            return isTakeLegal(from,to);
+        } else {
+            //Only Exception to this rule is 'rokkade' which is NYI
+            return false;
+        }
+    }
+    return true;*/
+}
+
+void Board::movePiece(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+    Piece* removed = pieceArray[toIndex];
+    pieceArray[toIndex] = pieceArray[fromIndex];
+    pieceArray[fromIndex] = nullptr;
+    pieceArray[toIndex]->setCurrentPosition(to);
+    if(removed){
+        delete removed;
+    }
+    toggleWhichColorCanMove();
+}
+
+void Board::restart(){
     /*
     Loop iteration (same as QML expects):
         A8,B8,C8,D8,E8,F8,G8,H8,A7...
@@ -60,61 +117,31 @@ Board::Board(QObject *parent) : QObject(parent)
     for(int i=16;i<=47;i++){
         pieceArray[i] = nullptr;
     }
-
+    whichColorCanMove = WHITE;
 }
 
-
-
-QVariantList Board::getPiecePNGList(){
-    QVariantList output;
-    for(int i=0;i<64;i++){
-        if(pieceArray[i]){
-            output.append(pieceArray[i]->getName());
-        } else {
-            output.append("blank");
-        }
-    }
-    return output;
-}
-/**
- * @brief Board::isMoveLegal Checks if the chess move is legal.
- * Needs to verify a list of things:
- * Is square free, if yes then check if movement is legal.
- * If no, check if piece is friendly or hostile.
- * If piece is hostile, check if take is legal.
- * @param from
- * @param to
- * @return
- */
-
-bool Board::isMoveLegal(QString from, QString to){
-    int fromIndex = Piece::convertMoveToIndex(from);
-    int toIndex = Piece::convertMoveToIndex(to);
-    return pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray);
-    /*if(isSquareFree(to)){
-        return isMovementLegal(from,to);
+QString Board::getWhichColorCanMove(){
+    if(whichColorCanMove == WHITE){
+        return "White's turn";
     } else {
-        if(isHostile(from, to)){
-            return isTakeLegal(from,to);
-        } else {
-            //Only Exception to this rule is 'rokkade' which is NYI
-            return false;
-        }
+        return "Black's turn";
     }
-    return true;*/
 }
 
-void Board::movePiece(QString from, QString to){
-    int fromIndex = Piece::convertMoveToIndex(from);
-    int toIndex = Piece::convertMoveToIndex(to);
-    Piece* removed = pieceArray[toIndex];
-    pieceArray[toIndex] = pieceArray[fromIndex];
-    pieceArray[fromIndex] = nullptr;
-    pieceArray[toIndex]->setCurrentPosition(to);
-    if(removed){
-        delete removed;
+bool Board::doesPieceBelongToPlayer(QString square){
+    int index = Piece::convertMoveToIndex(square);
+    return pieceArray[index]->getColor() == whichColorCanMove;
+}
+
+void Board::toggleWhichColorCanMove(){
+    if(whichColorCanMove == WHITE){
+        whichColorCanMove = BLACK;
+    } else {
+        whichColorCanMove = WHITE;
     }
 }
+
+
 
 bool Board::isSquareFree(QString square){
     int index = Piece::convertMoveToIndex(square);

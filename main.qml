@@ -8,11 +8,31 @@ ApplicationWindow  {
     visible: true
     title: qsTr("Qt Chess")
     Rectangle{
+        color: "whitesmoke"
+        height: 50
+        width: parent.width
         Text{
-            text: "White's turn"
+            id: boardMessage
+            anchors.left: parent.left
+            text: ""
+            font.family: "Helvetica"
+            font.pointSize: 24
+            font.bold: true
+            color: "red"
         }
+        Text{
+            id: turnMessage
+            anchors.right: parent.right
+            text: "White's turn"
+            font.family: "Helvetica"
+            font.pointSize: 24
+            font.bold: true
+            color: "black"
+        }
+
     }
     Board{
+        y: 50
         id: chessBoard
     }
     menuBar: MenuBar {
@@ -21,13 +41,16 @@ ApplicationWindow  {
             MenuItem {
                 text: "New Game"
                 onTriggered: {
-                    chessBoard.redrawBoard()
+                    cppBoard.restart();
+                    chessBoard.redrawBoard();
+                    boardMessage.text = "";
+                    turnMessage.text = "White's turn";
                 }
             }
             MenuItem {
                 text: "Quit"
                 onTriggered: {
-                     Qt.quit();
+                    Qt.quit();
                 }
             }
         }

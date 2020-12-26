@@ -33,15 +33,20 @@ Rectangle {
                 onPressed: {
                     if(isSquareSelected){
                         var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
-                        console.log(isMoveLegal)
+                        //console.log(isMoveLegal)
                         if(isMoveLegal){
+                            boardMessage.text = ""
                             cppBoard.movePiece(squareName,letter+number);
+                            turnMessage.text = cppBoard.getWhichColorCanMove();
+                        } else {
+                            boardMessage.text = "Invalid move"
                         }
+
                         isSquareSelected = false;
                         squareName = "";
                         boardModel.buildBoard();
                     } else {
-                        if(pngSource != "blank"){
+                        if(pngSource != "blank" && cppBoard.doesPieceBelongToPlayer(letter+number)){
                             isSquareSelected = true;
                             squareName = letter+number;
                             rectangleImage.source = "img/"+pngSource+"Selected.png"

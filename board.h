@@ -2,8 +2,6 @@
 #define BOARD_H
 
 #include <QObject>
-#include <qqml.h>
-#include <QVariantList>
 #include <piece.h>
 #include <bishop.h>
 #include <king.h>
@@ -20,12 +18,15 @@ public:
     Q_INVOKABLE QVariantList getPiecePNGList();
     Q_INVOKABLE bool isMoveLegal(QString from, QString to);
     Q_INVOKABLE void movePiece(QString from, QString to);
-
-signals:
-    void boardChanged();
-
+    Q_INVOKABLE void restart();
+    Q_INVOKABLE QString getWhichColorCanMove();
+    Q_INVOKABLE bool doesPieceBelongToPlayer(QString square);
+    void toggleWhichColorCanMove();
 private:
+    bool isChecked;
+    bool isMated;
     Piece* pieceArray[64];
+    Color whichColorCanMove = WHITE;
     bool isSquareFree(QString square);
     bool isHostile(QString from, QString to);
     bool isMovementLegal(QString from, QString to);
