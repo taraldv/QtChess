@@ -15,5 +15,17 @@
         <file>img/wQ.png</file>
         <file>img/wR.png</file>
         <file>img/blank.png</file>
+        <file>img/wPSelected.png</file>
+        <file>img/bBSelected.png</file>
+        <file>img/bKSelected.png</file>
+        <file>img/bNSelected.png</file>
+        <file>img/bPSelected.png</file>
+        <file>img/bQSelected.png</file>
+        <file>img/bRSelected.png</file>
+        <file>img/wBSelected.png</file>
+        <file>img/wKSelected.png</file>
+        <file>img/wNSelected.png</file>
+        <file>img/wQSelected.png</file>
+        <file>img/wRSelected.png</file>
     </qresource>
 </RCC>

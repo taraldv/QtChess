@@ -1,5 +1,7 @@
 #include "piece.h"
 
+
+
 Piece::Piece(QString _pos, enum Color _color, QString _name, char _type, QObject *parent) : QObject(parent)
 {
     currentPosition = _pos;
@@ -31,4 +33,19 @@ QString Piece::getCurrentPosition() const
 void Piece::setCurrentPosition(const QString &value)
 {
     currentPosition = value;
+}
+
+int Piece::convertMoveToIndex(QString move){
+    try{
+        char letter = move.at(0).toLatin1();
+        char number = move.at(1).toLatin1();
+        int col = (int)letter - 65;
+        int row = (int)number - 49;
+        int arrRow = 7-row;
+        int index = arrRow*8+col;
+        return index;
+    } catch(std::exception()){
+        qDebug() << "Something wrong with move string: " << move << ". at:" << Q_FUNC_INFO;
+        return 0;
+    }
 }

@@ -63,6 +63,8 @@ Board::Board(QObject *parent) : QObject(parent)
 
 }
 
+
+
 QVariantList Board::getPiecePNGList(){
     QVariantList output;
     for(int i=0;i<64;i++){
@@ -74,3 +76,73 @@ QVariantList Board::getPiecePNGList(){
     }
     return output;
 }
+/**
+ * @brief Board::isMoveLegal Checks if the chess move is legal.
+ * Needs to verify a list of things:
+ * Is square free, if yes then check if movement is legal.
+ * If no, check if piece is friendly or hostile.
+ * If piece is hostile, check if take is legal.
+ * @param from
+ * @param to
+ * @return
+ */
+
+bool Board::isMoveLegal(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+    return pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray);
+    /*if(isSquareFree(to)){
+        return isMovementLegal(from,to);
+    } else {
+        if(isHostile(from, to)){
+            return isTakeLegal(from,to);
+        } else {
+            //Only Exception to this rule is 'rokkade' which is NYI
+            return false;
+        }
+    }
+    return true;*/
+}
+
+void Board::movePiece(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+    Piece* removed = pieceArray[toIndex];
+    pieceArray[toIndex] = pieceArray[fromIndex];
+    pieceArray[fromIndex] = nullptr;
+    pieceArray[toIndex]->setCurrentPosition(to);
+    if(removed){
+        delete removed;
+    }
+}
+
+bool Board::isSquareFree(QString square){
+    int index = Piece::convertMoveToIndex(square);
+    return pieceArray[index];
+}
+
+/**
+ * @brief Board::isHostile checks if the colors of the pieces are different.
+ * Both squares should already be verified to contain pieces.
+ * @param from QString
+ * @param to QString
+ * @return bool
+ */
+/*bool Board::isHostile(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+    return pieceArray[fromIndex]->getColor() != pieceArray[toIndex]->getColor();
+}
+
+bool Board::isTakeLegal(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+   // return pieceArray[fromIndex]->is
+    int toIndex = Piece::convertMoveToIndex(to);
+}
+
+bool Board::isMovementLegal(QString from, QString to){
+    int fromIndex = Piece::convertMoveToIndex(from);
+    int toIndex = Piece::convertMoveToIndex(to);
+}*/
+
+

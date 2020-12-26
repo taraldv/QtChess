@@ -3,10 +3,15 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 1.4
 
 ApplicationWindow  {
-    width: 900
-    height: 900
+    width: 800
+    height: 850
     visible: true
     title: qsTr("Qt Chess")
+    Rectangle{
+        Text{
+            text: "White's turn"
+        }
+    }
     Board{
         id: chessBoard
     }

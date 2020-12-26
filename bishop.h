@@ -6,7 +6,9 @@ class Bishop : public Piece
 {
 public:
     Bishop(QString pos, enum Color _color, QString name);
-    bool isMoveLegal(QString newPosisiton);
+    bool isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** arr);
+private:
+    bool isMovementBlocked(QString to, Piece** arr);
 };
 
 #endif // BISHOP_H

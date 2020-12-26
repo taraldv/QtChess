@@ -2,46 +2,83 @@ import QtQuick 2.12
 
 Rectangle {
     width: 100*8; height: 100*8
+    property var isSquareSelected;
+    property var squareName;
+
+
+    Image{
+        id: cursorImage
+        source: "img/blank.png"
+        x: 0
+        y: 0
+    }
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onPressed: {
+            isSquareSelected = false;
+            squareName = "";
+            boardModel.buildBoard();
+        }
+    }
+
     Component {
         id: squareDelegate
         Rectangle {
             color: squareColor;
             width: 100;
             height: 100;
+            MouseArea {
+                anchors.fill: parent
+                onPressed: {
+                    if(isSquareSelected){
+                        var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
+                        console.log(isMoveLegal)
+                        if(isMoveLegal){
+                            cppBoard.movePiece(squareName,letter+number);
+                        }
+                        isSquareSelected = false;
+                        squareName = "";
+                        boardModel.buildBoard();
+                    } else {
+                        if(pngSource != "blank"){
+                            isSquareSelected = true;
+                            squareName = letter+number;
+                            rectangleImage.source = "img/"+pngSource+"Selected.png"
+                        }
+                    }
+
+                    /*console.log(letter+number);
+                    console.log(mouse.x)
+                    console.log(mouse.y)
+                    //This makes the click propagate to mouseArea "below" this mouseArea
+                    mouse.accepted = false*/
+
+                }
+            }
             Text{
                 text: letter + number
                 color: "black"
             }
             Image {
+                id: rectangleImage
                 anchors.verticalCenter: parent.verticalCenter
                 source: "img/"+pngSource+".png"
-                //  width: maDownloadImage.containsMouse ? 34 : 32
-                // height: maDownloadImage.containsMouse ? 34 : 32
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        console.log(letter+number)
-                        // parent.parent.border.color = "red";
-                        // publicTorrrentTitle = title;
-                        // publicTorrentId = torrentId;
-                        // fileDialog.open();
-                        //torrentHandler.downloadFile(torrentId, user.getTorrentPass());
-                    }
-                }
             }
         }
 
     }
 
     GridView {
+        interactive: false
         //cellHeight: 60
         // cellWidth: 60
         anchors.fill: parent
         model: boardModel
         delegate: squareDelegate
         //highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-        // focus: true
+        //focus: true
     }
     Component.onCompleted: {
         boardModel.buildBoard();
@@ -57,7 +94,7 @@ Rectangle {
             boardModel.clear();
             var white = "bisque";
             var black = "saddlebrown";
-           // var pngSource = "blank";
+            // var pngSource = "blank";
             var currentBoardPiecesArray = cppBoard.getPiecePNGList();
             /*
             Loop iteration:
