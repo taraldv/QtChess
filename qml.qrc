@@ -27,5 +27,22 @@
         <file>img/wNSelected.png</file>
         <file>img/wQSelected.png</file>
         <file>img/wRSelected.png</file>
+        <file>img/1.png</file>
+        <file>img/2.png</file>
+        <file>img/3.png</file>
+        <file>img/4.png</file>
+        <file>img/5.png</file>
+        <file>img/6.png</file>
+        <file>img/7.png</file>
+        <file>img/8.png</file>
+        <file>img/A.png</file>
+        <file>img/B.png</file>
+        <file>img/C.png</file>
+        <file>img/D.png</file>
+        <file>img/E.png</file>
+        <file>img/F.png</file>
+        <file>img/G.png</file>
+        <file>img/H.png</file>
+        <file>CustomBorder.qml</file>
     </qresource>
 </RCC>
