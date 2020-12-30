@@ -1,6 +1,6 @@
 #include "bishop.h"
 
-Bishop::Bishop(QString _pos, enum Color _color, QString _name):Piece(_pos, _color,_name,'R')
+Bishop::Bishop(QString _pos, enum Color _color, QString _name):Piece(_pos, _color,_name,'B')
 {
 
 }

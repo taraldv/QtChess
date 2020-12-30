@@ -1,6 +1,6 @@
 #include "knight.h"
 
-Knight::Knight(QString _pos, enum Color _color, QString _name):Piece(_pos, _color,_name,'R')
+Knight::Knight(QString _pos, enum Color _color, QString _name):Piece(_pos, _color,_name,'N')
 {
 
 }

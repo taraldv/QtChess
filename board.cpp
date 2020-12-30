@@ -56,6 +56,7 @@ void Board::movePiece(QString from, QString to){
         delete removed;
     }
     toggleWhichColorCanMove();
+    updateIsCheck();
 }
 
 void Board::restart(){
@@ -142,10 +143,61 @@ void Board::toggleWhichColorCanMove(){
 }
 
 
+bool Board::getIsCheck(){
+    return isCheck;
+}
+
+bool Board::getIsMate(){
+    return isMate;
+}
+
 
 bool Board::isSquareFree(QString square){
     int index = Piece::convertMoveToIndex(square);
     return pieceArray[index];
+}
+
+QString Board::getKingSquareString(Color c){
+    for(int i=0;i<64;i++){
+        if(pieceArray[i] && pieceArray[i]->getType() == 'K' && pieceArray[i]->getColor() == c){
+            return pieceArray[i]->getCurrentPosition();
+        }
+    }
+    return "";
+}
+
+void Board::updateIsCheck(){
+    QString vulnerableKingPosition;
+    if(whichColorCanMove == BLACK){
+        vulnerableKingPosition = getKingSquareString(WHITE);
+    } else {
+        vulnerableKingPosition = getKingSquareString(BLACK);
+    }
+    if(vulnerableKingPosition.length() == 0){
+        return;
+    }
+    for(int i=0;i<64;i++){
+        if(pieceArray[i]){
+            QString tempPieceLocation = pieceArray[i]->getCurrentPosition();
+            if(pieceArray[i]->getColor() == whichColorCanMove){
+                if(isMoveLegal(tempPieceLocation,vulnerableKingPosition)){
+                    isCheck = true;
+                    qDebug() << tempPieceLocation;
+                    qDebug() << vulnerableKingPosition;
+                    return;
+                }
+            }
+        }
+    }
+    isCheck = false;
+}
+
+void Board::updateIsMate(){
+    if(isCheck){
+
+    } else {
+        isMate = false;
+    }
 }
 
 /**

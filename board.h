@@ -22,17 +22,23 @@ public:
     Q_INVOKABLE QString getWhichColorCanMove();
     Q_INVOKABLE bool doesPieceBelongToPlayer(QString square);
     void toggleWhichColorCanMove();
+    Q_INVOKABLE bool getIsCheck();
+    Q_INVOKABLE bool getIsMate();
+
 private:
-    bool isChecked;
-    bool isMated;
+    bool isCheck = false;
+    bool isMate = false;
     Piece* pieceArray[64];
     Color whichColorCanMove = WHITE;
     bool isSquareFree(QString square);
     bool isHostile(QString from, QString to);
     bool isMovementLegal(QString from, QString to);
     bool isTakeLegal(QString from, QString to);
-    bool isCheck(QString square);
-    bool isMate(QString square);
+    QString getKingSquareString(Color c);
+
+
+    void updateIsCheck();
+    void updateIsMate();
     //TODO: rokkade og repeterende trekk
 };
 
