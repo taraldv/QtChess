@@ -12,15 +12,15 @@ King::King(QString _pos, enum Color _color, QString _name):Piece(_pos, _color,_n
  * @return bool
  */
 bool King::isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** arr){
-    if(pieceAtNewLocation){
-        if(pieceAtNewLocation->getColor() == color){
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        return isMovementLegal(squareName);
-    }
+    if(isMovementLegal(squareName)){
+        if(pieceAtNewLocation){
+            if(pieceAtNewLocation->getColor() == color){
+                return false;
+            } else {
+                return true;
+            }
+        } }
+    return false;
 }
 
 bool King::isMovementLegal(QString to){
@@ -35,5 +35,6 @@ bool King::isMovementLegal(QString to){
 
     int rowAbs = abs(rowDifference);
     int colAbs = abs(colDifference);
+
     return (rowAbs == 0 || rowAbs == 1) && (colAbs == 0 || colAbs == 1);
 }
