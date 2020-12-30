@@ -9,6 +9,7 @@ public:
     bool isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** arr);
 private:
     bool isMovementBlocked(QString to, Piece** arr);
+    bool isMovementLegal(QString to);
 };
 
 #endif // BISHOP_H
