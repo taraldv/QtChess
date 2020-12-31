@@ -29,5 +29,10 @@
         <file>img/wRSelected.png</file>
         <file>CustomBorder.qml</file>
         <file>MultiplayerInfo.qml</file>
+        <file>NumbersColumn.qml</file>
+        <file>LettersRow.qml</file>
+        <file>MessageInfo.qml</file>
+        <file>NamePopup.qml</file>
+        <file>JoinPopup.qml</file>
     </qresource>
 </RCC>

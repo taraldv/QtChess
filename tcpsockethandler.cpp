@@ -22,6 +22,12 @@ void TcpSocketHandler::joinGame(QString hostName, QString joinName){
     output.append(joinName.toUtf8().data());
     output.append(hostName.length());
     output.append(hostName.toUtf8().data());
+
+    if(tcpSocket->state() == QAbstractSocket::UnconnectedState){
+        if(!tcpSocket->waitForConnected(9000)){
+            emit serverError("Unable to connect to game server");
+        }
+    }
     tcpSocket->write(output);
 }
 
@@ -37,6 +43,22 @@ void TcpSocketHandler::move(QString hostName, QString from, QString to){
     output.append(to.toUtf8().data());
     qDebug() << "Writing move: f " << from << " t " << to;
     tcpSocket->write(output);
+}
+
+QString TcpSocketHandler::getPlayerName(){
+    return playerName;
+}
+
+void TcpSocketHandler::setPlayerName(QString newName){
+    playerName = newName;
+}
+
+QString TcpSocketHandler::getHostName(){
+    return hostName;
+}
+
+void TcpSocketHandler::setHostName(QString newHost){
+    hostName = newHost;
 }
 
 /**
@@ -76,7 +98,11 @@ void TcpSocketHandler::readData(){
     int messageCode = data[0];
     data.remove(0, 1);
     if(messageCode == 0){
-        qDebug() << "Something went wrong";
+        int errorLength = data[0];
+        data.remove(0, 1);
+        QByteArray errorMsgArray = QByteArray(data, errorLength);
+        QString msg(errorMsgArray);
+        emit serverError(msg);
     } else if(messageCode == 1){
         qDebug() << "Server got the message";
     } else if(messageCode == 2){

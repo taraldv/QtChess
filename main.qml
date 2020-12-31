@@ -3,48 +3,69 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 1.4
 
 ApplicationWindow  {
-    width: 1000
-    height: 1000
+
+    width: 800+50
+    height: 800+80+60+21
     visible: true
     title: qsTr("Qt Chess")
-    /*MultiplayerInfo{
-        id: multiRect
-        height: 40
-        width: parent.width
-        color: "red"
-    }*/
 
-    /*Rectangle{
-        y: 40
-        color: "whitesmoke"
-        height: 40
-        width: parent.width
-        Text{
-            id: boardMessage
-            anchors.left: parent.left
-            text: ""
-            font.family: "Helvetica"
-            font.pointSize: 24
-            font.bold: true
-            color: "red"
-        }
-        Text{
-            id: turnMessage
-            anchors.right: parent.right
-            text: "White's turn"
-            font.family: "Helvetica"
-            font.pointSize: 24
-            font.bold: true
-            color: "black"
-        }
 
-    }*/
-    Board{
-        width: 1000;
-        height: 850;
-        id: chessBoard
+    NamePopup{
+        id: changeNameDialog
     }
+    JoinPopup{
+        id: joinDialog
+    }
+
+    Column{
+        MultiplayerInfo{
+            id: multiRect
+            height: 40
+            width: parent.width
+            //color: "blue"
+            Component.onCompleted: {
+                setPlayerName(cppSocket.getPlayerName())
+            }
+        }
+        MessageInfo{
+            id: messageRect
+            height: 40
+            width: parent.width
+            //anchors.top: multiRect.bottom
+        }
+        Row{
+            NumbersColumn{
+                id:leftNumbersColumn
+            }
+
+            Column{
+                LettersRow{
+                    id: topLettersRow
+                    //anchors.top: messageRect.bottom
+                }
+
+                Board{
+                    id: chessBoard
+                    //anchors.top: topLettersRow.bottom
+                    //y: multiRect.height+messageRect.height
+                    width: 100*8;
+                    height: 100*8;
+
+                }
+                LettersRow{
+                    id: bottomLettersRow
+                    //anchors.top: chessBoard.bottom
+
+                }
+            }
+            NumbersColumn{
+                id:rightNumbersColumn
+            }
+        }
+    }
+
     menuBar: MenuBar {
+
         Menu {
             title: "File"
             MenuItem {
@@ -52,10 +73,12 @@ ApplicationWindow  {
                 onTriggered: {
                     cppBoard.restart();
                     chessBoard.redrawBoard();
+                    //multiRect.visible = false;
+                    //multiRect.setPlayerName(cppSocket.getPlayerName());
                     chessBoard.multiplayer = false;
                     chessBoard.isPlayerTurn = true;
-                    boardMessage.text = "";
-                    turnMessage.text = "White's turn";
+                    messageRect.setBoardMessage("");
+                    messageRect.setTurnMessage("White's turn");
                 }
             }
             MenuItem {
@@ -63,23 +86,20 @@ ApplicationWindow  {
                 onTriggered: {
                     cppBoard.restart();
                     chessBoard.redrawBoard();
+                    //multiRect.visible = true;
+                    multiRect.changeColor("white");
+                    //multiRect.setPlayerName(cppSocket.getPlayerName());
                     chessBoard.multiplayer = true;
                     chessBoard.isPlayerTurn = true;
                     cppSocket.hostGame("Hoster");
-                    boardMessage.text = "";
-                    turnMessage.text = "White's turn";
+                    messageRect.setBoardMessage("");
+                    messageRect.setTurnMessage("White's turn");
                 }
             }
             MenuItem {
                 text: "Join Game"
                 onTriggered: {
-                    cppBoard.restart();
-                    chessBoard.redrawBoard();
-                    chessBoard.multiplayer = true;
-                    chessBoard.isPlayerTurn = false;
-                    cppSocket.joinGame("Hoster","Joiner");
-                    boardMessage.text = "";
-                    turnMessage.text = "White's turn";
+                    joinDialog.open();
                 }
             }
             MenuItem {
@@ -89,7 +109,15 @@ ApplicationWindow  {
                 }
             }
         }
-
+        Menu {
+            title: "Options"
+            MenuItem {
+                text: "Change name"
+                onTriggered: {
+                    changeNameDialog.open();
+                }
+            }
+        }
     }
 }
 
