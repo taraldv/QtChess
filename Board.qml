@@ -5,6 +5,7 @@ Rectangle {
     property var squareName;
     property var multiplayer;
     property var isPlayerTurn;
+    color: "red"
     Connections {
         target: cppSocket
         function onMultiplayerMove(from, to) {
@@ -103,7 +104,7 @@ Rectangle {
             height: h;
             CustomBorder
             {
-                commonBorderWidth: 2
+                commonBorderWidth: 0
                 borderColor: "black"
             }
             MouseArea {
@@ -176,7 +177,7 @@ Rectangle {
                 for(var column=-1;column<=8;column++){
                     //Red for undefined square
                     var color = "red";
-                    var specialColor = "whitesmoke";
+                    var specialColor = "grey";
                     if(row === 0 && column === -1){
                         append(createListElement(0, "x", specialColor, "blank",
                                                  false, false, 50, 50));

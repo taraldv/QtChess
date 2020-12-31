@@ -4,17 +4,17 @@ import QtQuick.Controls 1.4
 
 ApplicationWindow  {
     width: 1000
-    height: 950
+    height: 1000
     visible: true
     title: qsTr("Qt Chess")
-    MultiplayerInfo{
+    /*MultiplayerInfo{
         id: multiRect
         height: 40
         width: parent.width
         color: "red"
-    }
+    }*/
 
-    Rectangle{
+    /*Rectangle{
         y: 40
         color: "whitesmoke"
         height: 40
@@ -38,11 +38,10 @@ ApplicationWindow  {
             color: "black"
         }
 
-    }
+    }*/
     Board{
-        y: 80
-        width: 100*10;
-        height: 100*9
+        width: 1000;
+        height: 850;
         id: chessBoard
     }
     menuBar: MenuBar {
