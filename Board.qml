@@ -15,7 +15,7 @@ Rectangle {
         function onMultiplayerMove(from, to) {
             console.log("Opponent has moved from: "+from+" to: "+to);
             cppBoard.movePiece(from,to);
-            turnMessage.text = cppBoard.getWhichColorCanMove();
+            messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());
             var isCheck = cppBoard.getIsCheck();
             if(isCheck){
                 boardMessage.text = "Check!"
@@ -80,7 +80,7 @@ Rectangle {
             if(isMoveLegal){
                 messageRect.setBoardMessage("");
                 cppBoard.movePiece(squareName,letter+number);
-                cppSocket.move("Hoster",squareName,letter+number);
+                cppSocket.move(cppSocket.getHostName(),squareName,letter+number);
                // console.log("Player has moved from: "+squareName+" to: "+letter+number);
                 isPlayerTurn = false;
                 messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());

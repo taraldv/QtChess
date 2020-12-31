@@ -91,7 +91,8 @@ ApplicationWindow  {
                     //multiRect.setPlayerName(cppSocket.getPlayerName());
                     chessBoard.multiplayer = true;
                     chessBoard.isPlayerTurn = true;
-                    cppSocket.hostGame("Hoster");
+                    cppSocket.setHostName(cppSocket.getPlayerName());
+                    cppSocket.hostGame(cppSocket.getPlayerName());
                     messageRect.setBoardMessage("");
                     messageRect.setTurnMessage("White's turn");
                 }
