@@ -6,7 +6,22 @@ Rectangle {
     property var squareName;
     property var multiplayer;
     property var isPlayerTurn;
-
+    Connections {
+        target: cppSocket
+        function onMultiplayerMove(from, to) {
+            console.log("Opponent has moved from: "+from+" to: "+to);
+            cppBoard.movePiece(from,to);
+            turnMessage.text = cppBoard.getWhichColorCanMove();
+            var isCheck = cppBoard.getIsCheck();
+            if(isCheck){
+                boardMessage.text = "Check!"
+            }
+            isPlayerTurn = true;
+            isSquareSelected = false;
+            squareName = "";
+            boardModel.buildBoard();
+        }
+    }
     Image{
         id: cursorImage
         source: "img/blank.png"
@@ -20,6 +35,64 @@ Rectangle {
             isSquareSelected = false;
             squareName = "";
             boardModel.buildBoard();
+        }
+    }
+    function singleplayerMove(letter, number, pngSource, image){
+        if(isSquareSelected){
+            var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
+            //console.log(isMoveLegal)
+            if(isMoveLegal){
+                boardMessage.text = ""
+                cppBoard.movePiece(squareName,letter+number);
+                turnMessage.text = cppBoard.getWhichColorCanMove();
+                var isCheck = cppBoard.getIsCheck();
+                if(isCheck){
+                    boardMessage.text = "Check!"
+                }
+            } else {
+                boardMessage.text = "Invalid move"
+            }
+
+            isSquareSelected = false;
+            squareName = "";
+            boardModel.buildBoard();
+        } else {
+            selectSquare(letter,number,pngSource, image);
+        }
+    }
+    function selectSquare(letter, number, pngSource,image){
+        if(pngSource !== "blank" && cppBoard.doesPieceBelongToPlayer(letter+number)){
+            isSquareSelected = true;
+            squareName = letter+number;
+            //console.log(image);
+            image.source = "img/"+pngSource+"Selected.png"
+        }
+    }
+
+    function multiplayerMove(letter,number, pngSource, image){
+        if(isSquareSelected){
+            var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
+            //console.log(isMoveLegal)
+            if(isMoveLegal){
+                boardMessage.text = ""
+                cppBoard.movePiece(squareName,letter+number);
+                cppSocket.move("Hoster",squareName,letter+number);
+                console.log("Player has moved from: "+squareName+" to: "+letter+number);
+                isPlayerTurn = false;
+                turnMessage.text = cppBoard.getWhichColorCanMove();
+                var isCheck = cppBoard.getIsCheck();
+                if(isCheck){
+                    boardMessage.text = "Check!"
+                }
+            } else {
+                boardMessage.text = "Invalid move"
+            }
+
+            isSquareSelected = false;
+            squareName = "";
+            boardModel.buildBoard();
+        } else {
+            selectSquare(letter,number,pngSource,image);
         }
     }
 
@@ -37,40 +110,14 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onPressed: {
-                    //Do nothing if square number is 0 (outside the board) or its multiplayer and its not the players turn
-                    if(number != 0 || (multiplayer && isPlayerTurn)){
-                        if(isSquareSelected){
-                            var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
-                            //console.log(isMoveLegal)
-                            if(isMoveLegal){
-                                boardMessage.text = ""
-                                cppBoard.movePiece(squareName,letter+number);
-                                turnMessage.text = cppBoard.getWhichColorCanMove();
-                                var isCheck = cppBoard.getIsCheck();
-                                if(isCheck){
-                                    boardMessage.text = "Check!"
-                                }
-                            } else {
-                                boardMessage.text = "Invalid move"
-                            }
-
-                            isSquareSelected = false;
-                            squareName = "";
-                            boardModel.buildBoard();
-                        } else {
-                            if(pngSource != "blank" && cppBoard.doesPieceBelongToPlayer(letter+number)){
-                                isSquareSelected = true;
-                                squareName = letter+number;
-                                rectangleImage.source = "img/"+pngSource+"Selected.png"
-                            }
+                    //Do nothing if square number is 0 (outside the board)
+                    if(number != 0){
+                        if(multiplayer && isPlayerTurn){
+                            multiplayerMove(letter,number,pngSource,rectangleImage);
+                        } else if(!multiplayer) {
+                            singleplayerMove(letter,number,pngSource, rectangleImage);
                         }
                     }
-                    /*console.log(letter+number);
-                    console.log(mouse.x)
-                    console.log(mouse.y)
-                    //This makes the click propagate to mouseArea "below" this mouseArea
-                    mouse.accepted = false*/
-
                 }
             }
             Text{

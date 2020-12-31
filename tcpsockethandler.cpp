@@ -25,6 +25,20 @@ void TcpSocketHandler::joinGame(QString hostName, QString joinName){
     tcpSocket->write(output);
 }
 
+void TcpSocketHandler::move(QString hostName, QString from, QString to){
+    QByteArray output;
+    int code = 2;
+    output.append(code);
+    output.append(hostName.length());
+    output.append(hostName.toUtf8().data());
+    output.append(from.length());
+    output.append(from.toUtf8().data());
+    output.append(to.length());
+    output.append(to.toUtf8().data());
+    qDebug() << "Writing move: f " << from << " t " << to;
+    tcpSocket->write(output);
+}
+
 /**
  * @brief TcpSocketHandler::init
  * @return
@@ -52,6 +66,8 @@ void TcpSocketHandler::handleMove(QByteArray data){
     QByteArray toMoveArray = QByteArray(data, toMoveLength);
     QString toMove(toMoveArray);
     data.remove(0, toMoveLength);
+
+    emit multiplayerMove(fromMove,toMove);
 }
 
 void TcpSocketHandler::readData(){

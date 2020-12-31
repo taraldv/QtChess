@@ -22,7 +22,7 @@ private:
     void afterDataWritten();
     void handleMove(QByteArray data);
 signals:
-
+    void multiplayerMove(QString from, QString to);
 };
 
 #endif // TCPSOCKETHANDLER_H
