@@ -73,11 +73,14 @@ Rectangle {
 
                 }
             }
-            /* Text{
-                text: letter + number
+            Text{
+                visible: textVisible
+                text: letter
                 color: "black"
-            }*/
+                font.pointSize: 30
+            }
             Image {
+                visible: imageVisible
                 id: rectangleImage
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -127,17 +130,17 @@ Rectangle {
                     var color = "red";
                     var specialColor = "whitesmoke";
                     if(row === 0 && column === -1){
-                        append(createListElement(0, "x", specialColor, "blank"));
+                        append(createListElement(0, "x", specialColor, "blank", false, false));
+                    } else if(column === 8){
+                        var blankSquare = createListElement(0, "x", specialColor, "blank", false, false);
+                        append(blankSquare);
                     }else if(row === 0){
-                        var letterSquare = createListElement(0, "x", specialColor, String.fromCharCode(column+65));
+                        var letterSquare = createListElement(0, String.fromCharCode(column+65), specialColor, "blank", false, true);
                         append(letterSquare);
                     } else if(column === -1) {
-                        var numberSquare = createListElement(0, "x", specialColor, String.fromCharCode(row+48));
+                        var numberSquare = createListElement(0, String.fromCharCode(row+48), specialColor, "blank", false, true);
                         append(numberSquare);
-                    } else if(column === 8){
-                        var blankSquare = createListElement(0, "x", specialColor, "blank");
-                        append(blankSquare);
-                    }else {
+                    } else {
                         if(row % 2 == 0){
                             if(column % 2 ==0){
                                 color = white
@@ -153,19 +156,21 @@ Rectangle {
                         }
                         //Big letter 'A' in ascii is 65
                         var letter = String.fromCharCode(column+65);
-                        var element = createListElement(row,letter,color, currentBoardPiecesArray[index]);
+                        var element = createListElement(row,letter,color, currentBoardPiecesArray[index], true, false);
                         append(element);
                         index++;
                     }
                 }
             }
         }
-        function createListElement(number, letter ,color, pngSource) {
+        function createListElement(number, letter ,color, pngSource, imageVisible, textVisible) {
             return {
                 number: number,
                 letter: letter,
                 squareColor: color,
-                pngSource: pngSource
+                pngSource: pngSource,
+                imageVisible: imageVisible,
+                textVisible: textVisible
             };
         }
 
