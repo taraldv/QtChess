@@ -4,7 +4,7 @@ Sjakk program for Qt
 Rokade<br>
 Sjakk matt sjekk<br>
 ## Updated GUI
-![](https://tarves.no/gif/chessCheck.png)
+![](https://tarves.no/gif/chessCheck.PNG)
 ## New game menu
 ![](https://tarves.no/gif/newGame.png)
 ## Example game
