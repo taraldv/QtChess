@@ -1,7 +1,7 @@
 import QtQuick 2.12
 
 Rectangle {
-    width: 100*9; height: 100*9
+    width: 100*10; height: 100*9
     property var isSquareSelected;
     property var squareName;
 
@@ -122,19 +122,22 @@ Rectangle {
             //Add '0' as extra row, which is not part of the board, for displaying letters
             for(var row=8;row>=0;row--){
                 //Add '-1' as extra column, to display numbers
-                for(var column=-1;column<8;column++){
+                for(var column=-1;column<=8;column++){
                     //Red for undefined square
                     var color = "red";
                     var specialColor = "whitesmoke";
                     if(row === 0 && column === -1){
-                        append(createListElement(0,"x",specialColor,"blank"));
+                        append(createListElement(0, "x", specialColor, "blank"));
                     }else if(row === 0){
-                        var letterSquare = createListElement(0,"x",specialColor, String.fromCharCode(column+65));
+                        var letterSquare = createListElement(0, "x", specialColor, String.fromCharCode(column+65));
                         append(letterSquare);
                     } else if(column === -1) {
-                        var numberSquare = createListElement(0,"x",specialColor, String.fromCharCode(row+48));
+                        var numberSquare = createListElement(0, "x", specialColor, String.fromCharCode(row+48));
                         append(numberSquare);
-                    } else {
+                    } else if(column === 8){
+                        var blankSquare = createListElement(0, "x", specialColor, "blank");
+                        append(blankSquare);
+                    }else {
                         if(row % 2 == 0){
                             if(column % 2 ==0){
                                 color = white
