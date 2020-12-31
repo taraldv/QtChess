@@ -15,7 +15,8 @@ SOURCES += \
         pawn.cpp \
         piece.cpp \
         queen.cpp \
-        rook.cpp
+        rook.cpp \
+        tcpsockethandler.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,4 +39,5 @@ HEADERS += \
     pawn.h \
     piece.h \
     queen.h \
-    rook.h
+    rook.h \
+    tcpsockethandler.h

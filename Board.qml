@@ -4,7 +4,8 @@ Rectangle {
     width: 100*10; height: 100*9
     property var isSquareSelected;
     property var squareName;
-
+    property var multiplayer;
+    property var isPlayerTurn;
 
     Image{
         id: cursorImage
@@ -36,9 +37,8 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onPressed: {
-                    if(number == 0){
-
-                    } else {
+                    //Do nothing if square number is 0 (outside the board) or its multiplayer and its not the players turn
+                    if(number != 0 || (multiplayer && isPlayerTurn)){
                         if(isSquareSelected){
                             var isMoveLegal = cppBoard.isMoveLegal(squareName,letter+number);
                             //console.log(isMoveLegal)

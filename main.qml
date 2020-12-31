@@ -43,6 +43,32 @@ ApplicationWindow  {
                 onTriggered: {
                     cppBoard.restart();
                     chessBoard.redrawBoard();
+                    chessBoard.multiplayer = false;
+                    chessBoard.isPlayerTurn = true;
+                    boardMessage.text = "";
+                    turnMessage.text = "White's turn";
+                }
+            }
+            MenuItem {
+                text: "Host Game"
+                onTriggered: {
+                    cppBoard.restart();
+                    chessBoard.redrawBoard();
+                    chessBoard.multiplayer = true;
+                    chessBoard.isPlayerTurn = true;
+                    cppSocket.hostGame("Hoster");
+                    boardMessage.text = "";
+                    turnMessage.text = "White's turn";
+                }
+            }
+            MenuItem {
+                text: "Join Game"
+                onTriggered: {
+                    cppBoard.restart();
+                    chessBoard.redrawBoard();
+                    chessBoard.multiplayer = true;
+                    chessBoard.isPlayerTurn = false;
+                    cppSocket.joinGame("Hoster","Joiner");
                     boardMessage.text = "";
                     turnMessage.text = "White's turn";
                 }

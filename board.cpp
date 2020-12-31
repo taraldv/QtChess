@@ -254,7 +254,12 @@ bool Board::getBoardCheckStatus(){
  */
 void Board::updateIsMate(){
     if(isCheck){
+        //Loop all pieces of checked player
+            //Attempt isLegal for every square on board
+                //If legal, simulate move, if isChecked = false, isMate = false;
 
+
+        //If all legal moves on all pieces still leaves isChecked = true, isMate = true;
     } else {
         isMate = false;
     }

@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "board.h"
+#include "tcpsockethandler.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,8 +21,11 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     Board* board = new Board();
+    TcpSocketHandler* socket = new TcpSocketHandler();
     QScopedPointer<Board> cppBoard(board);
+    QScopedPointer<TcpSocketHandler> cppSocket(socket);
     engine.rootContext()->setContextProperty("cppBoard", cppBoard.data());
+    engine.rootContext()->setContextProperty("cppSocket", cppSocket.data());
 
     engine.load(url);
 
