@@ -7,7 +7,5 @@ Sjakk matt sjekk<br>
 ![](https://tarves.no/gif/chessCheck.PNG)
 ## New game menu
 ![](https://tarves.no/gif/newGame.png)
-## Example game
-![](https://tarves.no/gif/game.PNG)
 ## Invalid move animation
 ![Gif](https://tarves.no/gif/chess.gif)
