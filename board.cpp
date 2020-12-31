@@ -80,6 +80,7 @@ void Board::movePiece(QString from, QString to){
     }
     toggleWhichColorCanMove();
     isCheck = getBoardCheckStatus();
+    updateIsMate();
 }
 
 void Board::restart(){
@@ -209,7 +210,10 @@ bool Board::getBoardCheckStatus(){
     }
     return false;
 }
-
+/**
+ * @brief Board::updateIsMate check if there exists a move which can 'un-check' the
+ * vulnerable King
+ */
 void Board::updateIsMate(){
     if(isCheck){
 
