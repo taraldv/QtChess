@@ -2,6 +2,7 @@
 Sjakk program for Qt
 ## TODO
 Rokade<br>
+En passant<br>
 Sjakk matt sjekk<br>
 ## Updated GUI
 ![](https://tarves.no/gif/chessCheck.PNG)
