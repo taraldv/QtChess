@@ -47,7 +47,9 @@ Rectangle {
                                 cppBoard.movePiece(squareName,letter+number);
                                 turnMessage.text = cppBoard.getWhichColorCanMove();
                                 var isCheck = cppBoard.getIsCheck();
-                                console.log(isCheck);
+                                if(isCheck){
+                                    boardMessage.text = "Check!"
+                                }
                             } else {
                                 boardMessage.text = "Invalid move"
                             }
