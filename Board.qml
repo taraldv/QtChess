@@ -1,7 +1,6 @@
 import QtQuick 2.12
 
 Rectangle {
-    width: 100*10; height: 100*9
     property var isSquareSelected;
     property var squareName;
     property var multiplayer;
@@ -100,8 +99,8 @@ Rectangle {
         id: squareDelegate
         Rectangle {
             color: squareColor;
-            width: 100;
-            height: 100;
+            width: w;
+            height: h;
             CustomBorder
             {
                 commonBorderWidth: 2
@@ -179,15 +178,25 @@ Rectangle {
                     var color = "red";
                     var specialColor = "whitesmoke";
                     if(row === 0 && column === -1){
-                        append(createListElement(0, "x", specialColor, "blank", false, false));
+                        append(createListElement(0, "x", specialColor, "blank",
+                                                 false, false, 50, 50));
                     } else if(column === 8){
-                        var blankSquare = createListElement(0, "x", specialColor, "blank", false, false);
+                        if(row ===0){
+                            var cornerSquare = createListElement(0, "x", specialColor, "blank",
+                                                                false, false, 50, 50);
+                            append(cornerSquare);
+                        }
+
+                        var blankSquare = createListElement(0, "x", specialColor, "blank",
+                                                            false, false, 50, 100);
                         append(blankSquare);
                     }else if(row === 0){
-                        var letterSquare = createListElement(0, String.fromCharCode(column+65), specialColor, "blank", false, true);
+                        var letterSquare = createListElement(0, String.fromCharCode(column+65), specialColor, "blank",
+                                                             false, true, 100, 50);
                         append(letterSquare);
                     } else if(column === -1) {
-                        var numberSquare = createListElement(0, String.fromCharCode(row+48), specialColor, "blank", false, true);
+                        var numberSquare = createListElement(0, String.fromCharCode(row+48), specialColor, "blank",
+                                                             false, true, 50, 100);
                         append(numberSquare);
                     } else {
                         if(row % 2 == 0){
@@ -205,21 +214,23 @@ Rectangle {
                         }
                         //Big letter 'A' in ascii is 65
                         var letter = String.fromCharCode(column+65);
-                        var element = createListElement(row,letter,color, currentBoardPiecesArray[index], true, false);
+                        var element = createListElement(row,letter,color, currentBoardPiecesArray[index], true, false, 100, 100);
                         append(element);
                         index++;
                     }
                 }
             }
         }
-        function createListElement(number, letter ,color, pngSource, imageVisible, textVisible) {
+        function createListElement(number, letter ,color, pngSource, imageVisible, textVisible, width, height) {
             return {
                 number: number,
                 letter: letter,
                 squareColor: color,
                 pngSource: pngSource,
                 imageVisible: imageVisible,
-                textVisible: textVisible
+                textVisible: textVisible,
+                w: width,
+                h: height
             };
         }
 

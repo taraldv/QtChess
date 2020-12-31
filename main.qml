@@ -7,9 +7,17 @@ ApplicationWindow  {
     height: 950
     visible: true
     title: qsTr("Qt Chess")
+    MultiplayerInfo{
+        id: multiRect
+        height: 40
+        width: parent.width
+        color: "red"
+    }
+
     Rectangle{
+        y: 40
         color: "whitesmoke"
-        height: 50
+        height: 40
         width: parent.width
         Text{
             id: boardMessage
@@ -32,7 +40,9 @@ ApplicationWindow  {
 
     }
     Board{
-        y: 50
+        y: 80
+        width: 100*10;
+        height: 100*9
         id: chessBoard
     }
     menuBar: MenuBar {
