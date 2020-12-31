@@ -47,7 +47,7 @@ bool Board::isMoveLegal(QString from, QString to){
             pieceArray[fromIndex] = nullptr;
 
             bool isChecked = getBoardCheckStatus();
-            qDebug() << whichColorCanMove << " is checked. Will this move remove the check: " << !isChecked;
+           // qDebug() << whichColorCanMove << " is checked. Will this move remove the check: " << !isChecked;
 
             //Reset piece locations
             pieceArray[toIndex] = toPiece;
@@ -72,7 +72,7 @@ bool Board::isMoveLegal(QString from, QString to){
 
             bool isChecked = getBoardCheckStatus();
 
-            qDebug() << whichColorCanMove << " has attempted a move, did the move put his own King in check: " << isChecked;
+            //qDebug() << whichColorCanMove << " has attempted a move, did the move put his own King in check: " << isChecked;
 
             //Reset piece locations
             pieceArray[toIndex] = toPiece;
@@ -229,7 +229,7 @@ QString Board::getKingSquareString(Color c){
 
 bool Board::getBoardCheckStatus(){
     QString vulnerableKingPosition = getKingSquareString(whichColorCanMove);
-    qDebug() << "Checking if the King @ " << vulnerableKingPosition << " is checked";
+    //qDebug() << "Checking if the King @ " << vulnerableKingPosition << " is checked";
     Piece* vulnerableKingPiece = pieceArray[Piece::convertMoveToIndex(vulnerableKingPosition)];
     Color oppositeColor;
     if(whichColorCanMove == BLACK){
