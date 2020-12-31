@@ -78,6 +78,8 @@ Rectangle {
                 text: letter
                 color: "black"
                 font.pointSize: 30
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
             Image {
                 visible: imageVisible
