@@ -30,20 +30,28 @@ QVariantList Board::getPiecePNGList(){
  */
 
 bool Board::isMoveLegal(QString from, QString to){
+    if(!isMoveStringValid(from) || !isMoveStringValid(to)){
+        qDebug() << "from: " << from << " to: " << to;
+        return false;
+    }
     if(isCheck){
+
         int fromIndex = Piece::convertMoveToIndex(from);
         int toIndex = Piece::convertMoveToIndex(to);
         if(pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray)){
-            //Simulate a move, only changes board position, does not change internal piece location
+            //Simulate a move
             Piece* toPiece = pieceArray[toIndex];
             Piece* fromPiece = pieceArray[fromIndex];
+            fromPiece->setCurrentPosition(to);
             pieceArray[toIndex] = fromPiece;
             pieceArray[fromIndex] = nullptr;
 
             bool isChecked = getBoardCheckStatus();
+            qDebug() << whichColorCanMove << " is checked. Will this move remove the check: " << !isChecked;
 
             //Reset piece locations
             pieceArray[toIndex] = toPiece;
+            fromPiece->setCurrentPosition(from);
             pieceArray[fromIndex] = fromPiece;
 
             //If check was removed, the move is legal.
@@ -51,9 +59,30 @@ bool Board::isMoveLegal(QString from, QString to){
         }
         return false;
     } else {
+        //Needs to check if the move is legal, and if it puts the king in a vulnerable position
         int fromIndex = Piece::convertMoveToIndex(from);
         int toIndex = Piece::convertMoveToIndex(to);
-        return pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray);
+        if(pieceArray[fromIndex]->isMoveLegal(to,pieceArray[toIndex],pieceArray)){
+
+            Piece* toPiece = pieceArray[toIndex];
+            Piece* fromPiece = pieceArray[fromIndex];
+            fromPiece->setCurrentPosition(to);
+            pieceArray[toIndex] = fromPiece;
+            pieceArray[fromIndex] = nullptr;
+
+            bool isChecked = getBoardCheckStatus();
+
+            qDebug() << whichColorCanMove << " has attempted a move, did the move put his own King in check: " << isChecked;
+
+            //Reset piece locations
+            pieceArray[toIndex] = toPiece;
+            fromPiece->setCurrentPosition(from);
+            pieceArray[fromIndex] = fromPiece;
+
+            //If check was removed, the move is legal.
+            return !isChecked;
+        }
+        return false;
     }
     /*if(isSquareFree(to)){
         return isMovementLegal(from,to);
@@ -181,6 +210,14 @@ bool Board::isSquareFree(QString square){
     return pieceArray[index];
 }
 
+bool Board::isMoveStringValid(QString move){
+    if(move.length() == 2){
+        //TODO add checks for A->H & 1->8
+        return true;
+    }
+    return false;
+}
+
 QString Board::getKingSquareString(Color c){
     for(int i=0;i<64;i++){
         if(pieceArray[i] && pieceArray[i]->getType() == 'K' && pieceArray[i]->getColor() == c){
@@ -192,6 +229,8 @@ QString Board::getKingSquareString(Color c){
 
 bool Board::getBoardCheckStatus(){
     QString vulnerableKingPosition = getKingSquareString(whichColorCanMove);
+    qDebug() << "Checking if the King @ " << vulnerableKingPosition << " is checked";
+    Piece* vulnerableKingPiece = pieceArray[Piece::convertMoveToIndex(vulnerableKingPosition)];
     Color oppositeColor;
     if(whichColorCanMove == BLACK){
         oppositeColor = WHITE;
@@ -200,9 +239,8 @@ bool Board::getBoardCheckStatus(){
     }
     for(int i=0;i<64;i++){
         if(pieceArray[i]){
-            QString tempPieceLocation = pieceArray[i]->getCurrentPosition();
             if(pieceArray[i]->getColor() == oppositeColor){
-                if(isMoveLegal(tempPieceLocation,vulnerableKingPosition)){
+                if(pieceArray[i]->isMoveLegal(vulnerableKingPosition,vulnerableKingPiece,pieceArray)){
                     return true;
                 }
             }

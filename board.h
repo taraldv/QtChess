@@ -34,6 +34,7 @@ private:
     bool isHostile(QString from, QString to);
     bool isMovementLegal(QString from, QString to);
     bool isTakeLegal(QString from, QString to);
+    bool isMoveStringValid(QString move);
     QString getKingSquareString(Color c);
 
     bool getBoardCheckStatus();

@@ -19,7 +19,10 @@ bool King::isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** ar
             } else {
                 return true;
             }
-        } }
+        } else {
+            return true;
+        }
+    }
     return false;
 }
 
