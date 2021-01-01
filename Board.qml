@@ -43,7 +43,7 @@ Rectangle {
                 var isCheck = cppBoard.getIsCheck();
                 var isMate = cppBoard.getIsMate();
                 if(isMate){
-                    messageRect.setBoardMessage("Mate!");
+                    messageRect.setBoardMessage("Checkmate!");
                 } else if(isCheck){
                     messageRect.setBoardMessage("Check!");
                 }
@@ -82,7 +82,7 @@ Rectangle {
                 var isCheck = cppBoard.getIsCheck();
                 var isMate = cppBoard.getIsMate();
                 if(isMate){
-                    messageRect.setBoardMessage("Mate!");
+                    messageRect.setBoardMessage("Checkmate!");
                 } else if(isCheck){
                     messageRect.setBoardMessage("Check!");
                 }
