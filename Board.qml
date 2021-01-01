@@ -5,11 +5,6 @@ Rectangle {
     property var squareName;
     property var multiplayer;
     property var isPlayerTurn;
-    CustomBorder
-    {
-        commonBorderWidth: 3
-        borderColor: "black"
-    }
     Connections {
         target: cppSocket
         function onMultiplayerMove(from, to) {
@@ -25,12 +20,6 @@ Rectangle {
             squareName = "";
             boardModel.buildBoard();
         }
-    }
-    Image{
-        id: cursorImage
-        source: "img/blank.png"
-        x: 0
-        y: 0
     }
     MouseArea {
         anchors.fill: parent
@@ -113,10 +102,6 @@ Rectangle {
             color: squareColor;
             width: 100;
             height: 100;
-            CustomBorder{
-                commonBorderWidth: 0
-                borderColor: "black"
-            }
             MouseArea {
                 anchors.fill: parent
                 onPressed: {

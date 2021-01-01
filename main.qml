@@ -8,7 +8,7 @@ ApplicationWindow  {
     height: 1000
     visible: true
     title: qsTr("Qt Chess")
-    color: "whitesmoke"
+    color: "red"
 
 
     NamePopup{
