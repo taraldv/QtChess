@@ -3,7 +3,7 @@ Sjakk program for Qt
 ## TODO
 Bonde blir om til dronning når den når andre siden av brettet<br>
 ## Game example
-![](https://tarves.no/gif/chessMate.PNG)
+![](https://tarves.no/gif/chessCheckmate.PNG)
 ## Menu for singleplayer or multiplayer
 ![](https://tarves.no/gif/chessMulti.PNG)
 ## Change name for multiplayer
