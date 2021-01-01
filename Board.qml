@@ -125,13 +125,9 @@ Rectangle {
 
     GridView {
         interactive: false
-        //cellHeight: 60
-        // cellWidth: 60
         anchors.fill: parent
         model: boardModel
         delegate: squareDelegate
-        //highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-        //focus: true
     }
     Component.onCompleted: {
         boardModel.buildBoard();

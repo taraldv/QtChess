@@ -4,11 +4,11 @@ import QtQuick.Controls 1.4
 
 ApplicationWindow  {
 
-    width: 1000
-    height: 1000
+   // width: 1000
+    //height: 1000
     visible: true
     title: qsTr("Qt Chess")
-    color: "red"
+    //color: "red"
 
 
     NamePopup{
@@ -38,7 +38,6 @@ ApplicationWindow  {
 
                 Board{
                     id: chessBoard
-                    //anchors.top: topLettersRow.bottom
                     width: 100*8;
                     height: 100*8;
 
