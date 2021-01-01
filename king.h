@@ -12,6 +12,7 @@ private:
     bool isMovementLegal(QString to);
     bool isCastlingLegal(QString to, Piece** arr);
     bool hasMoved = false;
+    bool isSquareSafe(QString square, Piece** arr);
 };
 
 #endif // KING_H

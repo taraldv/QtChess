@@ -87,6 +87,9 @@ bool King::isCastlingLegal(QString to, Piece** arr){
                 tempSquare += currentColumn-i;
             }
             tempSquare += currentRow;
+            if(!isSquareSafe(tempSquare,arr)){
+                return false;
+            }
             if(arr[Piece::convertMoveToIndex(tempSquare)]){
                 return false;
             }
@@ -106,6 +109,31 @@ bool King::isCastlingLegal(QString to, Piece** arr){
         return true;
     }
     return false;
+}
+/**
+ * @brief King::isSquareSafe
+ * Iterate all opponent pieces to check if any of them can legally take the square
+ * It needs to temporarly alter this Kings internal location
+ * @param square QString
+ * @param arr Piece* array
+ * @return bool
+ */
+bool King::isSquareSafe(QString square, Piece **arr){
+    QString originalPosition = currentPosition;
+    for(int i=0;i<64;i++){
+        if(arr[i]){
+            Color tempColor = arr[i]->getColor();
+            if(color != tempColor){
+                setCurrentPosition(square);
+                if(arr[i]->isMoveLegal(square,this,arr)){
+                    setCurrentPosition(originalPosition);
+                    return false;
+                }
+            }
+        }
+    }
+    setCurrentPosition(originalPosition);
+    return true;
 }
 
 bool King::isMovementLegal(QString to){
