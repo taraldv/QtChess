@@ -1,52 +1,34 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.3
+import QtQuick.Controls 1.4
 
 Dialog {
+    property var selectedHost;
+    property var isSelected;
+    standardButtons: StandardButton.Cancel | StandardButton.Apply
     visible: false
-    height: 100
-    title: "Type host name"
-    //modal: true
-    //anchors.centerIn: parent
-    standardButtons:  Dialog.Close | Dialog.Apply
-    Rectangle{
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: "white"
-        border.color: "black"
+    title: "Select host to join"
 
-        width: parent.width
-        height: 40
-        TextInput{
-            id: hostNameInput
-            width: parent.width
-            anchors.verticalCenter: parent.verticalCenter
-            text: "";
-            font.family: "Helvetica"
-            font.pointSize: 20
-            font.bold: true
-            //color: black
-            onAccepted: {
-                joinGame();
+    TableView {
+        id: tableView
+        anchors.fill: parent
+        model: hostlistModel
+        TableViewColumn {
+            role: "hostName"
+            title: "Host Name"
+        }
+        onClicked:  {
+            if (hostlistModel.get(currentRow)) {
+                selectedHost = hostlistModel.get(currentRow)
+                isSelected = true;
+            } else {
+                selectedHost = null;
+                isSelected = false;
             }
         }
-
     }
-    function joinGame(){
-        messageRect.setBoardMessage("");
-        messageRect.setTurnMessage("White's turn");
-        cppBoard.restart();
-        chessBoard.redrawBoard();
-        chessBoard.multiplayer = true;
-        chessBoard.isPlayerTurn = false;
-        //multiRect.visible = true;
-        multiRect.changeColor("black");
-        cppSocket.setHostName(hostNameInput.text);
-        cppSocket.joinGame(hostNameInput.text,cppSocket.getPlayerName());
-
-    }
-
     Component.onCompleted: {
-        hostNameInput.text = cppSocket.getHostName();
+        hostlistModel.buildList();
     }
     onApply: {
         joinGame();
@@ -54,5 +36,37 @@ Dialog {
     }
     onRejected: {
         this.close();
+    }
+
+
+    ListModel {
+        id: hostlistModel
+        function buildList(){
+            append(createListElement("test name","testId"));
+        }
+        function createListElement(hostName, hostId) {
+            return {
+                hostName: hostName,
+                hostId: hostId
+            };
+        }
+
+    }
+    function joinGame(){
+        if(isSelected){
+            console.log(selectedHost.hostId)
+            messageRect.setBoardMessage("");
+            messageRect.setTurnMessage("White's turn");
+
+            cppBoard.restart();
+            chessBoard.redrawBoard();
+
+            chessBoard.multiplayer = true;
+            chessBoard.isPlayerTurn = false;
+            multiRect.changeColor("black");
+
+            cppSocket.setHostName(selectedHost.hostId);
+            cppSocket.joinGame(cppSocket.getHostName(),cppSocket.getPlayerName());
+        }
     }
 }
