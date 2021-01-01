@@ -232,7 +232,6 @@ QString Board::getKingSquareString(Color c){
  * @brief Board::printBoard for debugging
  */
 void Board::printBoard(){
-    qDebug() << "*****************************";
     QString row = "";
     for(int i=0;i<64;i++){
         Piece* p = pieceArray[i];

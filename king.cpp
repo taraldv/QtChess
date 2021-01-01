@@ -53,20 +53,16 @@ bool King::isCastlingLegal(QString to, Piece** arr){
         QString rookSquare = "";
         if(color == WHITE){
             if(colDifference > 0){
-                rookSquare = "A1";
-                //Rook at A1
-            } else {
                 rookSquare = "H1";
-                //Rook at H1
+            } else {
+                rookSquare = "A1";
             }
 
         } else if(color == BLACK){
             if(colDifference > 0){
-                rookSquare = "A8";
-                //Rook at A8
-            } else {
                 rookSquare = "H8";
-                //Rook at H8
+            } else {
+                rookSquare = "A8";
             }
         }
         char rookColumn = rookSquare.at(0).toLatin1();
@@ -77,12 +73,12 @@ bool King::isCastlingLegal(QString to, Piece** arr){
             return false;
         }
         //If the Rook has previously moved
-        if(((Rook*)rookPiece)->getHasMoved()){
+        if(rookPiece->getType() == 'R' && ((Rook*)rookPiece)->getHasMoved()){
             return false;
         }
         int rookAndKingDifference = abs(currentColumn-rookColumn);
         //Checks if any pieces exist between Rook and King
-        for(int i=1;i<rookAndKingDifference;i++){
+        for(int i=1;i<rookAndKingDifference-1;i++){
             QString tempSquare = "";
             //If the colDifference is a positive number, we should check between column E and H
             if(colDifference > 0){
@@ -107,7 +103,7 @@ bool King::isCastlingLegal(QString to, Piece** arr){
         newRookSquare += currentRow;
         arr[Piece::convertMoveToIndex(newRookSquare)] = rookPiece;
         arr[rookIndex] = nullptr;
-
+        return true;
     }
     return false;
 }
