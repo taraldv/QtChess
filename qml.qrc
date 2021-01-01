@@ -28,7 +28,6 @@
         <file>img/wQSelected.png</file>
         <file>img/wRSelected.png</file>
         <file>CustomBorder.qml</file>
-        <file>MultiplayerInfo.qml</file>
         <file>NumbersColumn.qml</file>
         <file>LettersRow.qml</file>
         <file>MessageInfo.qml</file>

@@ -1,7 +1,7 @@
 #include "tcpsockethandler.h"
 
 TcpSocketHandler::TcpSocketHandler() : QObject(nullptr){
-    initSocket();
+
 }
 
 void TcpSocketHandler::hostGame(QString hostName)
@@ -22,12 +22,6 @@ void TcpSocketHandler::joinGame(QString hostName, QString joinName){
     output.append(joinName.toUtf8().data());
     output.append(hostName.length());
     output.append(hostName.toUtf8().data());
-
-    if(tcpSocket->state() == QAbstractSocket::UnconnectedState){
-        if(!tcpSocket->waitForConnected(9000)){
-            emit serverError("Unable to connect to game server");
-        }
-    }
     tcpSocket->write(output);
 }
 
@@ -41,7 +35,7 @@ void TcpSocketHandler::move(QString hostName, QString from, QString to){
     output.append(from.toUtf8().data());
     output.append(to.length());
     output.append(to.toUtf8().data());
-    qDebug() << "Writing move: f " << from << " t " << to;
+    //qDebug() << "Writing move: f " << from << " t " << to;
     tcpSocket->write(output);
 }
 
@@ -67,14 +61,15 @@ void TcpSocketHandler::setHostName(QString newHost){
  */
 void TcpSocketHandler::initSocket(){
     tcpSocket = new QTcpSocket(this);
-    //tcpSocket->bind(Q, serverPort, QAbstractSocket::ShareAddress);
     connect(tcpSocket, &QTcpSocket::readyRead, this, &TcpSocketHandler::readData);
     connect(tcpSocket, &QTcpSocket::bytesWritten, this, &TcpSocketHandler::afterDataWritten);
+    connect(tcpSocket, &QTcpSocket::hostFound, this, &TcpSocketHandler::connectedToServer);
+    connect(tcpSocket, &QTcpSocket::errorOccurred, this, &TcpSocketHandler::handleError);
+    connect(tcpSocket, &QTcpSocket::disconnected, this, &TcpSocketHandler::handleDisconnect);
     tcpSocket->connectToHost(serverAddress, serverPort);
-    if(!tcpSocket->waitForConnected(9000)){
-        qDebug() << "TcpSocketError: " << tcpSocket->errorString();
-    }
 }
+
+
 
 void TcpSocketHandler::handleMove(QByteArray data){
     int fromMoveLength = data[0];
@@ -109,6 +104,18 @@ void TcpSocketHandler::readData(){
         handleMove(data);
     }
 
+}
+
+void TcpSocketHandler::connectedToServer(){
+    emit serverError("Connected");
+}
+
+void TcpSocketHandler::handleError(){
+    emit serverError("Server error: "+tcpSocket->errorString());
+}
+
+void TcpSocketHandler::handleDisconnect(){
+    emit serverError("Disconnected from server");
 }
 
 void TcpSocketHandler::afterDataWritten(){

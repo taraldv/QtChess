@@ -27,7 +27,7 @@ Dialog {
             //color: black
             onAccepted: {
                 cppSocket.setPlayerName(playerNameInput.text);
-                multiRect.setPlayerName(playerNameInput.text);
+                messageRect.setPlayerName(playerNameInput.text);
 
             }
         }
@@ -39,7 +39,7 @@ Dialog {
     }
     onApply: {
         cppSocket.setPlayerName(playerNameInput.text);
-        multiRect.setPlayerName(playerNameInput.text);
+        messageRect.setPlayerName(playerNameInput.text);
         this.close();
     }
     onRejected: {

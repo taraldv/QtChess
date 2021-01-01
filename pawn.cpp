@@ -159,7 +159,11 @@ bool Pawn::pawnTake(QString newPos)
     }
     return false;
 }
-
+/**
+ * @brief Pawn::convertToQueen
+ * Create a new Queen and replace this pointer with queen
+ * Move this Piece to the newposision, so the board will remove it when it calls 'movePiece'
+ */
 void Pawn::convertToQueen(){
 
 }

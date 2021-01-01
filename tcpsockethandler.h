@@ -17,14 +17,17 @@ public:
     Q_INVOKABLE void setPlayerName(QString newName);
     Q_INVOKABLE QString getHostName();
     Q_INVOKABLE void setHostName(QString newHost);
+    Q_INVOKABLE void initSocket();
 private:
     int serverPort = 2233;
     QString playerName = "Player1";
     QString hostName;
     QHostAddress serverAddress = QHostAddress("46.250.220.57");
-    void initSocket();
     QTcpSocket *tcpSocket;
     void readData();
+    void connectedToServer();
+    void handleError();
+    void handleDisconnect();
     void afterDataWritten();
     void handleMove(QByteArray data);
 signals:

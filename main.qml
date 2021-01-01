@@ -4,10 +4,11 @@ import QtQuick.Controls 1.4
 
 ApplicationWindow  {
 
-    width: 800+50
-    height: 800+80+60+21
+    width: 1000
+    height: 1000
     visible: true
     title: qsTr("Qt Chess")
+    color: "whitesmoke"
 
 
     NamePopup{
@@ -18,20 +19,11 @@ ApplicationWindow  {
     }
 
     Column{
-        MultiplayerInfo{
-            id: multiRect
-            height: 40
-            width: parent.width
-            //color: "blue"
+        MessageInfo{
+            id: messageRect
             Component.onCompleted: {
                 setPlayerName(cppSocket.getPlayerName())
             }
-        }
-        MessageInfo{
-            id: messageRect
-            height: 40
-            width: parent.width
-            //anchors.top: multiRect.bottom
         }
         Row{
             NumbersColumn{
@@ -47,7 +39,6 @@ ApplicationWindow  {
                 Board{
                     id: chessBoard
                     //anchors.top: topLettersRow.bottom
-                    //y: multiRect.height+messageRect.height
                     width: 100*8;
                     height: 100*8;
 
@@ -73,8 +64,6 @@ ApplicationWindow  {
                 onTriggered: {
                     cppBoard.restart();
                     chessBoard.redrawBoard();
-                    //multiRect.visible = false;
-                    //multiRect.setPlayerName(cppSocket.getPlayerName());
                     chessBoard.multiplayer = false;
                     chessBoard.isPlayerTurn = true;
                     messageRect.setBoardMessage("");
@@ -84,17 +73,17 @@ ApplicationWindow  {
             MenuItem {
                 text: "Host Game"
                 onTriggered: {
+                    messageRect.setBoardMessage("Attempting to connect, please wait")
+                    cppSocket.initSocket();
                     cppBoard.restart();
                     chessBoard.redrawBoard();
-                    //multiRect.visible = true;
-                    multiRect.changeColor("white");
-                    //multiRect.setPlayerName(cppSocket.getPlayerName());
+                    messageRect.changeColor("white");
                     chessBoard.multiplayer = true;
                     chessBoard.isPlayerTurn = true;
                     cppSocket.setHostName(cppSocket.getPlayerName());
                     cppSocket.hostGame(cppSocket.getPlayerName());
-                    messageRect.setBoardMessage("");
                     messageRect.setTurnMessage("White's turn");
+
                 }
             }
             MenuItem {

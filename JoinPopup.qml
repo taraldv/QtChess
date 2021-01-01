@@ -54,19 +54,24 @@ Dialog {
     }
     function joinGame(){
         if(isSelected){
-            console.log(selectedHost.hostId)
-            messageRect.setBoardMessage("");
-            messageRect.setTurnMessage("White's turn");
+            var socketStarted = cppSocket.initSocket();
+            if(socketStarted){
+                console.log(selectedHost.hostId)
+                messageRect.setBoardMessage("");
+                messageRect.setTurnMessage("White's turn");
 
-            cppBoard.restart();
-            chessBoard.redrawBoard();
+                cppBoard.restart();
+                chessBoard.redrawBoard();
 
-            chessBoard.multiplayer = true;
-            chessBoard.isPlayerTurn = false;
-            multiRect.changeColor("black");
+                chessBoard.multiplayer = true;
+                chessBoard.isPlayerTurn = false;
+                messageRect.changeColor("black");
 
-            cppSocket.setHostName(selectedHost.hostId);
-            cppSocket.joinGame(cppSocket.getHostName(),cppSocket.getPlayerName());
+                cppSocket.setHostName(selectedHost.hostId);
+                cppSocket.joinGame(cppSocket.getHostName(),cppSocket.getPlayerName());
+            } else {
+                messageRect.setBoardMessage("Game server was not found")
+            }
         }
     }
 }

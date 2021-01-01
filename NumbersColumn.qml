@@ -1,7 +1,9 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
 Column {
-    width: 25
+    width: 35
+    leftPadding: 5
+    rightPadding: 5
     //height: parent.height
     z: -1
     // color: "yellow"
