@@ -50,9 +50,13 @@ Rectangle {
                 cppBoard.movePiece(squareName,letter+number);
                 messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());
                 var isCheck = cppBoard.getIsCheck();
-                if(isCheck){
+                var isMate = cppBoard.getIsMate();
+                if(isMate){
+                    messageRect.setBoardMessage("Mate!");
+                } else if(isCheck){
                     messageRect.setBoardMessage("Check!");
                 }
+
             } else {
                 messageRect.setBoardMessage("Invalid move");
             }
@@ -85,8 +89,11 @@ Rectangle {
                 isPlayerTurn = false;
                 messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());
                 var isCheck = cppBoard.getIsCheck();
-                if(isCheck){
-                    messageRect.setBoardMessage("Invalid move");
+                var isMate = cppBoard.getIsMate();
+                if(isMate){
+                    messageRect.setBoardMessage("Mate!");
+                } else if(isCheck){
+                    messageRect.setBoardMessage("Check!");
                 }
             } else {
                 boardMessage.text = "Invalid move"

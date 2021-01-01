@@ -31,7 +31,7 @@ QVariantList Board::getPiecePNGList(){
 
 bool Board::isMoveLegal(QString from, QString to){
     if(!isMoveStringValid(from) || !isMoveStringValid(to)){
-       // qDebug() << "from: " << from << " to: " << to;
+        // qDebug() << "from: " << from << " to: " << to;
         return false;
     }
     if(isCheck){
@@ -47,7 +47,7 @@ bool Board::isMoveLegal(QString from, QString to){
             pieceArray[fromIndex] = nullptr;
 
             bool isChecked = getBoardCheckStatus();
-           // qDebug() << whichColorCanMove << " is checked. Will this move remove the check: " << !isChecked;
+            // qDebug() << whichColorCanMove << " is checked. Will this move remove the check: " << !isChecked;
 
             //Reset piece locations
             pieceArray[toIndex] = toPiece;
@@ -111,7 +111,7 @@ void Board::movePiece(QString from, QString to){
     isCheck = getBoardCheckStatus();
     updateIsMate();
     //qDebug() << "moved from: " << from << " to: " << to;
-   // printBoard();
+    // printBoard();
 }
 
 void Board::restart(){
@@ -243,7 +243,7 @@ void Board::printBoard(){
             char type = p->getType();
             row += type;
             row += " ";
-           // qDebug() << "type: " << type << " index: " << i;
+            // qDebug() << "type: " << type << " index: " << i;
         } else {
             row += "  ";
         }
@@ -280,18 +280,40 @@ bool Board::getBoardCheckStatus(){
 void Board::updateIsMate(){
     if(isCheck){
         for(int i=0;i<64;i++){
-            Piece* tempPiece = pieceArray[i];
+            Piece* fromPiece = pieceArray[i];
             //Piece exists and belongs to current player
-            if(tempPiece && tempPiece->getColor() == whichColorCanMove){
+            if(fromPiece && fromPiece->getColor() == whichColorCanMove){
+                QString from = fromPiece->getCurrentPosition();
+                //Checks if tempPiece can move to any square on the board
+                for(int j=0;j<64;j++){
+                    if(i == j){
+                        continue;
+                    }
+                    QString to = Piece::convertIndexToMove(j);
+                    bool canMoveToSquare = fromPiece->isMoveLegal(to,pieceArray[j],pieceArray);
+                    //Simulate the move, see if it solved the check
+                    if(canMoveToSquare){
+                        Piece* toPiece = pieceArray[j];
+                        fromPiece->setCurrentPosition(to);
+                        pieceArray[j] = fromPiece;
+                        pieceArray[i] = nullptr;
 
+                        bool isChecked = getBoardCheckStatus();
+
+                        //Reset piece locations
+                        pieceArray[j] = toPiece;
+                        fromPiece->setCurrentPosition(from);
+                        pieceArray[i] = fromPiece;
+                        //If King is no longer checked, stop the loop
+                        if(!isChecked){
+                            qDebug() << "It is not mate because moving from: " << from << " to: " << to << " solved the check";
+                            return;
+                        }
+                    }
+                }
             }
         }
-        //Loop all pieces of checked player
-            //Attempt isLegal for every square on board
-                //If legal, simulate move, if isChecked = false, isMate = false;
-
-
-        //If all legal moves on all pieces still leaves isChecked = true, isMate = true;
+        isMate = true;
     } else {
         isMate = false;
     }
