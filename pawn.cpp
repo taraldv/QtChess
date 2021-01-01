@@ -126,8 +126,6 @@ bool Pawn::enPassantTake(Piece **arr, QString newPos){
         //Separated into two ifs for readability
         if(tempPiece && tempPiece->getType()=='P' && tempPiece->getColor() != color){
             if(((Pawn*)tempPiece)->getRecentlyMovedTwice()){
-                qDebug() << "Pawn from: " << currentPosition << " to: " << newPos;
-                qDebug() << "Deleting pieces because of An Passant1";
                 //Deletes the piece and returns the move is legal
                 arr[index] = nullptr;
                 return true;
