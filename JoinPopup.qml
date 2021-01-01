@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Controls 1.4
 
@@ -54,7 +54,6 @@ Dialog {
     }
     function joinGame(){
         if(isSelected){
-            messageRect.setBoardMessage("Attempting to join");
             messageRect.setTurnMessage("White's turn");
             cppBoard.restart();
             chessBoard.redrawBoard();

@@ -59,7 +59,7 @@ Rectangle{
         }
         Text{
             id: boardMessage
-            text: " "
+            text: ""
             font.family: "Helvetica"
             font.pointSize: 20
             font.bold: true
@@ -71,14 +71,6 @@ Rectangle{
 
     }
 
-
-
-    Connections {
-        target: cppSocket
-        function onServerError(error) {
-            setBoardMessage(error);
-        }
-    }
     function setTurnMessage(msg){
         turnMessage.text = msg;
     }

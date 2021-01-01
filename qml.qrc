@@ -32,5 +32,6 @@
         <file>MessageInfo.qml</file>
         <file>NamePopup.qml</file>
         <file>JoinPopup.qml</file>
+        <file>ErrorMessage.qml</file>
     </qresource>
 </RCC>

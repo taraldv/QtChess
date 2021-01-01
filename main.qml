@@ -52,6 +52,9 @@ ApplicationWindow  {
                 id:rightNumbersColumn
             }
         }
+        ErrorMessage{
+             id: errorRect
+        }
     }
 
     menuBar: MenuBar {
@@ -72,7 +75,6 @@ ApplicationWindow  {
             MenuItem {
                 text: "Host Game"
                 onTriggered: {
-                    messageRect.setBoardMessage("Attempting to connect")
                     cppBoard.restart();
                     chessBoard.redrawBoard();
                     messageRect.changeColor("White");

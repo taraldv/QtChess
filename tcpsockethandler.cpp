@@ -72,9 +72,10 @@ void TcpSocketHandler::initSocket(){
 
 void TcpSocketHandler::sendData(QByteArray bytes){
     if(tcpSocket->state() != QAbstractSocket::ConnectedState){
-        emit serverError("Connecting to server");
-        tcpSocket->connectToHost(serverAddress, serverPort);
-        if(!tcpSocket->waitForConnected(5000)){
+        if(tcpSocket->state() != QAbstractSocket::ConnectingState){
+            tcpSocket->connectToHost(serverAddress, serverPort);
+        }
+        if(!tcpSocket->waitForConnected(3000)){
             emit serverError("Connection failed");
             return;
         }
@@ -118,11 +119,11 @@ void TcpSocketHandler::readData(){
 }
 
 void TcpSocketHandler::connectedToServer(){
-    emit serverError("Connected");
+    emit serverError("Connected to game server");
 }
 
 void TcpSocketHandler::handleError(){
-    emit serverError(tcpSocket->errorString());
+    emit serverError("Server error: " + tcpSocket->errorString());
 }
 
 void TcpSocketHandler::handleDisconnect(){
