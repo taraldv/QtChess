@@ -110,6 +110,8 @@ void Board::movePiece(QString from, QString to){
     toggleWhichColorCanMove();
     isCheck = getBoardCheckStatus();
     updateIsMate();
+    qDebug() << "moved from: " << from << " to: " << to;
+    printBoard();
 }
 
 void Board::restart(){
@@ -225,6 +227,30 @@ QString Board::getKingSquareString(Color c){
         }
     }
     return "";
+}
+/**
+ * @brief Board::printBoard for debugging
+ */
+void Board::printBoard(){
+    qDebug() << "*****************************";
+    QString row = "";
+    for(int i=0;i<64;i++){
+        Piece* p = pieceArray[i];
+        if(i != 0 && i % 8 == 0){
+            qDebug() << row;
+            row = "";
+        }
+        if(p){
+            char type = p->getType();
+            row += type;
+            row += " ";
+           // qDebug() << "type: " << type << " index: " << i;
+        } else {
+            row += "  ";
+        }
+
+    }
+    qDebug() << row;
 }
 
 bool Board::getBoardCheckStatus(){

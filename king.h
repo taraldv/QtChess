@@ -1,6 +1,7 @@
 #ifndef KING_H
 #define KING_H
 #include "piece.h"
+#include "rook.h"
 
 class King : public Piece
 {
@@ -9,6 +10,8 @@ public:
     bool isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** arr);
 private:
     bool isMovementLegal(QString to);
+    bool isCastlingLegal(QString to, Piece** arr);
+    bool hasMoved = false;
 };
 
 #endif // KING_H

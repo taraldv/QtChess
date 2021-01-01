@@ -36,7 +36,7 @@ private:
     bool isTakeLegal(QString from, QString to);
     bool isMoveStringValid(QString move);
     QString getKingSquareString(Color c);
-
+    void printBoard();
     bool getBoardCheckStatus();
     void updateIsMate();
     //TODO: rokkade og repeterende trekk

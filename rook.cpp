@@ -21,9 +21,11 @@ bool Rook::isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** ar
                 if(pieceAtNewLocation->getColor() == color){
                     return false;
                 } else {
+                    hasMoved = true;
                     return true;
                 }
             } else {
+                hasMoved = true;
                 return true;
             }
         }
@@ -87,4 +89,9 @@ bool Rook::isMovementLegal(QString to)
     int colDifference = newColumn-currentColumn;
     //If one of these values is 0, the movement is straight
     return (rowDifference == 0 || colDifference == 0);
+}
+
+bool Rook::getHasMoved() const
+{
+    return hasMoved;
 }
