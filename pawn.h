@@ -1,6 +1,7 @@
 #ifndef PAWN_H
 #define PAWN_H
 #include "piece.h"
+#include "queen.h"
 
 class Pawn : public Piece
 {
@@ -15,6 +16,7 @@ private:
     bool pawnForwardTwo(QString newPos);
     bool enPassantTake(Piece** arr, QString newPos);
     bool pawnTake(QString newPos);
+    void convertToQueen();
 };
 
 #endif // PAWN_H

@@ -160,3 +160,7 @@ bool Pawn::pawnTake(QString newPos)
     return false;
 }
 
+void Pawn::convertToQueen(){
+
+}
+
