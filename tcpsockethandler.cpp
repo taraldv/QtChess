@@ -1,7 +1,7 @@
 #include "tcpsockethandler.h"
 
 TcpSocketHandler::TcpSocketHandler() : QObject(nullptr){
-
+    initSocket();
 }
 
 void TcpSocketHandler::hostGame(QString hostName)
@@ -11,7 +11,7 @@ void TcpSocketHandler::hostGame(QString hostName)
     output.append(code);
     output.append(hostName.length());
     output.append(hostName.toUtf8().data());
-    tcpSocket->write(output);
+    sendData(output);
 }
 
 void TcpSocketHandler::joinGame(QString hostName, QString joinName){
@@ -22,7 +22,7 @@ void TcpSocketHandler::joinGame(QString hostName, QString joinName){
     output.append(joinName.toUtf8().data());
     output.append(hostName.length());
     output.append(hostName.toUtf8().data());
-    tcpSocket->write(output);
+    sendData(output);
 }
 
 void TcpSocketHandler::move(QString hostName, QString from, QString to){
@@ -35,8 +35,9 @@ void TcpSocketHandler::move(QString hostName, QString from, QString to){
     output.append(from.toUtf8().data());
     output.append(to.length());
     output.append(to.toUtf8().data());
-    //qDebug() << "Writing move: f " << from << " t " << to;
-    tcpSocket->write(output);
+
+    sendData(output);
+
 }
 
 QString TcpSocketHandler::getPlayerName(){
@@ -69,7 +70,17 @@ void TcpSocketHandler::initSocket(){
     tcpSocket->connectToHost(serverAddress, serverPort);
 }
 
-
+void TcpSocketHandler::sendData(QByteArray bytes){
+    if(tcpSocket->state() != QAbstractSocket::ConnectedState){
+        emit serverError("Connecting to server");
+        tcpSocket->connectToHost(serverAddress, serverPort);
+        if(!tcpSocket->waitForConnected(5000)){
+            emit serverError("Connection failed");
+            return;
+        }
+    }
+    tcpSocket->write(bytes);
+}
 
 void TcpSocketHandler::handleMove(QByteArray data){
     int fromMoveLength = data[0];

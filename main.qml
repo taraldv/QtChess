@@ -73,7 +73,6 @@ ApplicationWindow  {
                 text: "Host Game"
                 onTriggered: {
                     messageRect.setBoardMessage("Attempting to connect")
-                    cppSocket.initSocket();
                     cppBoard.restart();
                     chessBoard.redrawBoard();
                     messageRect.changeColor("White");

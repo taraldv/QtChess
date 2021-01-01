@@ -17,8 +17,9 @@ public:
     Q_INVOKABLE void setPlayerName(QString newName);
     Q_INVOKABLE QString getHostName();
     Q_INVOKABLE void setHostName(QString newHost);
-    Q_INVOKABLE void initSocket();
 private:
+    void initSocket();
+    void sendData(QByteArray bytes);
     int serverPort = 2233;
     QString playerName = "Player1";
     QString hostName;

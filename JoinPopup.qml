@@ -54,7 +54,6 @@ Dialog {
     }
     function joinGame(){
         if(isSelected){
-            cppSocket.initSocket();
             messageRect.setBoardMessage("Attempting to join");
             messageRect.setTurnMessage("White's turn");
             cppBoard.restart();
