@@ -72,11 +72,11 @@ ApplicationWindow  {
             MenuItem {
                 text: "Host Game"
                 onTriggered: {
-                    messageRect.setBoardMessage("Attempting to connect, please wait")
+                    messageRect.setBoardMessage("Attempting to connect")
                     cppSocket.initSocket();
                     cppBoard.restart();
                     chessBoard.redrawBoard();
-                    messageRect.changeColor("white");
+                    messageRect.changeColor("White");
                     chessBoard.multiplayer = true;
                     chessBoard.isPlayerTurn = true;
                     cppSocket.setHostName(cppSocket.getPlayerName());

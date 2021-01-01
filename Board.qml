@@ -25,9 +25,11 @@ Rectangle {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
         onPressed: {
-            isSquareSelected = false;
-            squareName = "";
-            boardModel.buildBoard();
+            if(isSquareSelected){
+                isSquareSelected = false;
+                squareName = "";
+                boardModel.buildBoard();
+            }
         }
     }
     function singleplayerMove(letter, number, pngSource, image){
@@ -74,7 +76,7 @@ Rectangle {
                 messageRect.setBoardMessage("");
                 cppBoard.movePiece(squareName,letter+number);
                 cppSocket.move(cppSocket.getHostName(),squareName,letter+number);
-               // console.log("Player has moved from: "+squareName+" to: "+letter+number);
+                // console.log("Player has moved from: "+squareName+" to: "+letter+number);
                 isPlayerTurn = false;
                 messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());
                 var isCheck = cppBoard.getIsCheck();

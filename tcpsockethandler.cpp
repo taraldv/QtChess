@@ -63,7 +63,7 @@ void TcpSocketHandler::initSocket(){
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket, &QTcpSocket::readyRead, this, &TcpSocketHandler::readData);
     connect(tcpSocket, &QTcpSocket::bytesWritten, this, &TcpSocketHandler::afterDataWritten);
-    connect(tcpSocket, &QTcpSocket::hostFound, this, &TcpSocketHandler::connectedToServer);
+    connect(tcpSocket, &QTcpSocket::connected, this, &TcpSocketHandler::connectedToServer);
     connect(tcpSocket, &QTcpSocket::errorOccurred, this, &TcpSocketHandler::handleError);
     connect(tcpSocket, &QTcpSocket::disconnected, this, &TcpSocketHandler::handleDisconnect);
     tcpSocket->connectToHost(serverAddress, serverPort);
@@ -111,7 +111,7 @@ void TcpSocketHandler::connectedToServer(){
 }
 
 void TcpSocketHandler::handleError(){
-    emit serverError("Server error: "+tcpSocket->errorString());
+    emit serverError(tcpSocket->errorString());
 }
 
 void TcpSocketHandler::handleDisconnect(){
