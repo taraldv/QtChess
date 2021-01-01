@@ -48,6 +48,11 @@ bool King::isCastlingLegal(QString to, Piece** arr){
         char currentRow = currentPosition.at(1).toLatin1();
 
         char newColumn = to.at(0).toLatin1();
+        char newRow = to.at(1).toLatin1();
+
+        if(newRow != currentRow){
+            return false;
+        }
 
         int colDifference = newColumn-currentColumn;
         QString rookSquare = "";

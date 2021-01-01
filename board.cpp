@@ -31,7 +31,7 @@ QVariantList Board::getPiecePNGList(){
 
 bool Board::isMoveLegal(QString from, QString to){
     if(!isMoveStringValid(from) || !isMoveStringValid(to)){
-        qDebug() << "from: " << from << " to: " << to;
+       // qDebug() << "from: " << from << " to: " << to;
         return false;
     }
     if(isCheck){
@@ -110,8 +110,8 @@ void Board::movePiece(QString from, QString to){
     toggleWhichColorCanMove();
     isCheck = getBoardCheckStatus();
     updateIsMate();
-    qDebug() << "moved from: " << from << " to: " << to;
-    printBoard();
+    //qDebug() << "moved from: " << from << " to: " << to;
+   // printBoard();
 }
 
 void Board::restart(){
