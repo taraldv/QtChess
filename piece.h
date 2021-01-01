@@ -16,6 +16,7 @@ public:
     QString getCurrentPosition() const;
     void setCurrentPosition(const QString &value);
     static int convertMoveToIndex(QString move);
+    static QString convertIndexToMove(int index);
 protected:
     char type;
     Color color;

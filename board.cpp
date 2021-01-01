@@ -279,6 +279,13 @@ bool Board::getBoardCheckStatus(){
  */
 void Board::updateIsMate(){
     if(isCheck){
+        for(int i=0;i<64;i++){
+            Piece* tempPiece = pieceArray[i];
+            //Piece exists and belongs to current player
+            if(tempPiece && tempPiece->getColor() == whichColorCanMove){
+
+            }
+        }
         //Loop all pieces of checked player
             //Attempt isLegal for every square on board
                 //If legal, simulate move, if isChecked = false, isMate = false;

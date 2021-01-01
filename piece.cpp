@@ -44,3 +44,12 @@ int Piece::convertMoveToIndex(QString move){
     int index = arrRow*8+col;
     return index;
 }
+
+QString Piece::convertIndexToMove(int index){
+    char col = (index % 8)+65;
+    char row = (7-(index / 8))+49;
+    QString output = "";
+    output += col;
+    output += row;
+    return output;
+}
