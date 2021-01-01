@@ -16,11 +16,29 @@ bool Pawn::isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** ar
         if(pieceAtNewLocation->getColor() == color){
             return false;
         } else {
-            return pawnTake(squareName);
+            if(pawnTake(squareName)){
+                recentlyMovedTwice = false;
+                return true;
+            }
         }
     } else {
-        return pawnForwardOne(squareName) || pawnForwardTwo(squareName);
+        if(pawnForwardTwo(squareName)){
+            recentlyMovedTwice = true;
+            return true;
+        } else if(pawnForwardOne(squareName)){
+            recentlyMovedTwice = false;
+            return true;
+        } else if(enPassantTake(arr, squareName)){
+            recentlyMovedTwice = false;
+            return true;
+        }
     }
+    return false;
+}
+
+bool Pawn::getRecentlyMovedTwice() const
+{
+    return recentlyMovedTwice;
 }
 /**
  * @brief Pawn::pawnForwardOne Forward one means no change in column and one increment
@@ -74,6 +92,49 @@ bool Pawn::pawnForwardTwo(QString newPos)
     return false;
 
 }
+/**
+ * @brief Pawn::enPassantTake need to check if an opponent pawn is adjecent.
+ * If yes, check if it moved twice.
+ * If it moved twice, this is a legal take.
+ * The board does not have the logic to remove a piece not on 'From' or 'To' squares.
+ * So the piece is removed in this function.
+ * @param arr Piece array
+ * @return bool
+ */
+bool Pawn::enPassantTake(Piece **arr, QString newPos){
+    char currentColumn = currentPosition.at(0).toLatin1();
+    char currentRow = currentPosition.at(1).toLatin1();
+
+    char newColumn = newPos.at(0).toLatin1();
+    char newRow = newPos.at(1).toLatin1();
+    int rowDifference = newRow-currentRow;
+    int colDifference = newColumn-currentColumn;
+    bool isSingleDiagonallyMovement = false;
+    if(color == WHITE){
+        isSingleDiagonallyMovement = rowDifference == 1 && (colDifference == 1 || colDifference == -1);
+    } else if(color == BLACK){
+        isSingleDiagonallyMovement = rowDifference == -1 && (colDifference == 1 || colDifference == -1);
+    }
+
+    //To find the location of the piece we use current row with the new column
+    if(isSingleDiagonallyMovement){
+        QString adjecentSquare = "";
+        adjecentSquare += newColumn;
+        adjecentSquare += currentRow;
+        int index = Piece::convertMoveToIndex(adjecentSquare);
+        Piece* tempPiece = arr[index];
+        //Separated into two ifs for readability
+        if(tempPiece && tempPiece->getType()=='P'){
+            if(((Pawn*)tempPiece)->getRecentlyMovedTwice()){
+                //Deletes the piece and returns the move is legal
+                arr[index] = nullptr;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * @brief Pawn::pawnTake Pawns can only take diagonally, a hostile piece already exists at the newPos
  * Only need to check if it is 1 diagonally depending on color
