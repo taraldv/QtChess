@@ -9,7 +9,7 @@ public:
     Pawn(QString pos, enum Color _color, QString name);
     bool isMoveLegal(QString squareName, Piece* pieceAtNewLocation, Piece** arr);
     bool getRecentlyMovedTwice() const;
-
+    bool hasReachedEndOfBoard();
 private:
     bool recentlyMovedTwice = false;
     bool pawnForwardOne(QString newPos);

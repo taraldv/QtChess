@@ -41,6 +41,20 @@ bool Pawn::getRecentlyMovedTwice() const
     return recentlyMovedTwice;
 }
 /**
+ * @brief Pawn::hasReachedEndOfBoard, checks if this piece has reached the end of board
+ * and should be replaced with a Queen. This function should only be called after a move.
+ * @return
+ */
+bool Pawn::hasReachedEndOfBoard(){
+    char currentRow = currentPosition.at(1).toLatin1();
+    if(color == WHITE){
+        return currentRow == '8';
+    } else if(color == BLACK) {
+        return currentRow == '1';
+    }
+    return false;
+}
+/**
  * @brief Pawn::pawnForwardOne Forward one means no change in column and one increment
  * decrement in row, depending on color. White should increase, black should decrease.
  * @param newPosition QString

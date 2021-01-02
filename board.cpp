@@ -100,12 +100,28 @@ bool Board::isMoveLegal(QString from, QString to){
 void Board::movePiece(QString from, QString to){
     int fromIndex = Piece::convertMoveToIndex(from);
     int toIndex = Piece::convertMoveToIndex(to);
-    Piece* removed = pieceArray[toIndex];
-    pieceArray[toIndex] = pieceArray[fromIndex];
+    Piece* toPiece = pieceArray[toIndex];
+    Piece* fromPiece = pieceArray[fromIndex];
+    pieceArray[toIndex] = fromPiece;
     pieceArray[fromIndex] = nullptr;
     pieceArray[toIndex]->setCurrentPosition(to);
-    if(removed){
-        delete removed;
+    if(toPiece){
+        delete toPiece;
+    }
+    //Checks if Pawn has reached end of board and should transform to a Queen
+    if(fromPiece->getType()=='P'){
+        if(((Pawn*)fromPiece)->hasReachedEndOfBoard()){
+            QString queenImageName;
+            Color pieceColor = fromPiece->getColor();
+            if(pieceColor == WHITE){
+                queenImageName = "wQ";
+            } else {
+                queenImageName = "bQ";
+            }
+            Queen* newQueen = new Queen(to, pieceColor, queenImageName);
+            delete fromPiece;
+            pieceArray[toIndex] = newQueen;
+        }
     }
     toggleWhichColorCanMove();
     isCheck = getBoardCheckStatus();
