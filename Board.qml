@@ -13,7 +13,7 @@ Rectangle {
             messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());
             var isCheck = cppBoard.getIsCheck();
             if(isCheck){
-                boardMessage.text = "Check!"
+                messageRect.setBoardMessage("Check!");
             }
             isPlayerTurn = true;
             isSquareSelected = false;
@@ -75,7 +75,7 @@ Rectangle {
             if(isMoveLegal){
                 messageRect.setBoardMessage("");
                 cppBoard.movePiece(squareName,letter+number);
-                cppSocket.move(cppSocket.getHostName(),squareName,letter+number);
+                cppSocket.move(squareName,letter+number);
                 // console.log("Player has moved from: "+squareName+" to: "+letter+number);
                 isPlayerTurn = false;
                 messageRect.setTurnMessage(cppBoard.getWhichColorCanMove());

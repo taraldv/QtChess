@@ -4,7 +4,7 @@ import QtQuick.Controls 1.4
 
 ApplicationWindow  {
 
-   // width: 1000
+    // width: 1000
     //height: 1000
     visible: true
     title: qsTr("Qt Chess")
@@ -53,7 +53,7 @@ ApplicationWindow  {
             }
         }
         ErrorMessage{
-             id: errorRect
+            id: errorRect
         }
     }
 
@@ -80,8 +80,7 @@ ApplicationWindow  {
                     messageRect.changeColor("White");
                     chessBoard.multiplayer = true;
                     chessBoard.isPlayerTurn = true;
-                    cppSocket.setHostName(cppSocket.getPlayerName());
-                    cppSocket.hostGame(cppSocket.getPlayerName());
+                    cppSocket.hostGame();
                     messageRect.setTurnMessage("White's turn");
 
                 }
@@ -89,6 +88,7 @@ ApplicationWindow  {
             MenuItem {
                 text: "Join Game"
                 onTriggered: {
+                    cppSocket.requestGames();
                     joinDialog.open();
                 }
             }
