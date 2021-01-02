@@ -27,8 +27,11 @@ Dialog {
             }
         }
     }
-    Component.onCompleted: {
-        hostlistModel.buildList();
+    Connections {
+        target: cppSocket
+        function onSetListOfGames(hostNames, gameIds) {
+            hostlistModel.buildList(hostNames,gameIds);
+        }
     }
     onApply: {
         joinGame();
@@ -41,13 +44,16 @@ Dialog {
 
     ListModel {
         id: hostlistModel
-        function buildList(){
-            append(createListElement("test name","testId"));
+        function buildList(hostNames,gameIds){
+            hostlistModel.clear();
+            for(var i=0;i<hostNames.length;i++){
+                append(createListElement(hostNames[i],gameIds[i]));
+            }
         }
-        function createListElement(hostName, hostId) {
+        function createListElement(hostName, gameId) {
             return {
                 hostName: hostName,
-                hostId: hostId
+                gameId: gameId
             };
         }
 
@@ -60,8 +66,8 @@ Dialog {
             chessBoard.multiplayer = true;
             chessBoard.isPlayerTurn = false;
             messageRect.changeColor("Black");
-            cppSocket.setHostName(selectedHost.hostId);
-            cppSocket.joinGame(cppSocket.getHostName(),cppSocket.getPlayerName());
+            cppSocket.setGameId(selectedHost.gameId);
+            cppSocket.joinGame();
 
         }
     }

@@ -4,33 +4,33 @@ TcpSocketHandler::TcpSocketHandler() : QObject(nullptr){
     initSocket();
 }
 
-void TcpSocketHandler::hostGame(QString hostName)
+void TcpSocketHandler::hostGame()
 {
     QByteArray output;
     int code = 0;
     output.append(code);
-    output.append(hostName.length());
-    output.append(hostName.toUtf8().data());
+    output.append(playerName.length());
+    output.append(playerName.toUtf8().data());
     sendData(output);
 }
 
-void TcpSocketHandler::joinGame(QString hostName, QString joinName){
+void TcpSocketHandler::joinGame(){
     QByteArray output;
     int code = 1;
     output.append(code);
-    output.append(joinName.length());
-    output.append(joinName.toUtf8().data());
-    output.append(hostName.length());
-    output.append(hostName.toUtf8().data());
+    output.append(playerName.length());
+    output.append(playerName.toUtf8().data());
+    output.append(gameId.length());
+    output.append(gameId.toUtf8().data());
     sendData(output);
 }
 
-void TcpSocketHandler::move(QString hostName, QString from, QString to){
+void TcpSocketHandler::move(QString from, QString to){
     QByteArray output;
     int code = 2;
     output.append(code);
-    output.append(hostName.length());
-    output.append(hostName.toUtf8().data());
+    output.append(gameId.length());
+    output.append(gameId.toUtf8().data());
     output.append(from.length());
     output.append(from.toUtf8().data());
     output.append(to.length());
@@ -48,13 +48,21 @@ void TcpSocketHandler::setPlayerName(QString newName){
     playerName = newName;
 }
 
-QString TcpSocketHandler::getHostName(){
-    return hostName;
+void TcpSocketHandler::requestGames(){
+    QByteArray output;
+    output.append(3);
+    tcpSocket->write(output);
 }
 
-void TcpSocketHandler::setHostName(QString newHost){
-    hostName = newHost;
+QString TcpSocketHandler::getNextStringSegement(QByteArray *data){
+    int segmentLength = *data[0];
+    data->remove(0, 1);
+    QByteArray segment = QByteArray(*data, segmentLength);
+    QString stringSegment(segment);
+    data->remove(0, segmentLength);
+    return stringSegment;
 }
+
 
 /**
  * @brief TcpSocketHandler::init
@@ -83,20 +91,40 @@ void TcpSocketHandler::sendData(QByteArray bytes){
     tcpSocket->write(bytes);
 }
 
-void TcpSocketHandler::handleMove(QByteArray data){
-    int fromMoveLength = data[0];
-    data.remove(0, 1);
-    QByteArray fromMoveArray = QByteArray(data, fromMoveLength);
-    QString fromMove(fromMoveArray);
-    data.remove(0, fromMoveLength);
+void TcpSocketHandler::setGameId(const QString &value)
+{
+    gameId = value;
+}
 
-    int toMoveLength = data[0];
-    data.remove(0, 1);
-    QByteArray toMoveArray = QByteArray(data, toMoveLength);
-    QString toMove(toMoveArray);
-    data.remove(0, toMoveLength);
+void TcpSocketHandler::handleMove(QByteArray data){
+    
+    QString fromMove = getNextStringSegement(&data);
+    QString toMove = getNextStringSegement(&data);
 
     emit multiplayerMove(fromMove,toMove);
+}
+
+void TcpSocketHandler::handleGameList(QByteArray data){
+
+    //List of games: gameCount forEach(hostName, gameId)
+    QList<QString> hostNames;
+    QList<QString> gameIds;
+    int gameCount = data[0];
+    qDebug() << "games recieved: " << gameCount;
+    data.remove(0, 1);
+    for(int i=0;i<gameCount;i++){
+        QString tempHostName = getNextStringSegement(&data);
+        QString tempGameId = getNextStringSegement(&data);
+        hostNames.append(tempHostName);
+        gameIds.append(tempGameId);
+    }
+    emit setListOfGames(hostNames,gameIds);
+}
+
+void TcpSocketHandler::handleHostSuccess(QByteArray data){
+    QString gameIdFromServer = getNextStringSegement(&data);
+    gameId = gameIdFromServer;
+    qDebug() << "updated gameId: " << gameId;
 }
 
 void TcpSocketHandler::readData(){
@@ -105,15 +133,19 @@ void TcpSocketHandler::readData(){
     int messageCode = data[0];
     data.remove(0, 1);
     if(messageCode == 0){
-        int errorLength = data[0];
-        data.remove(0, 1);
-        QByteArray errorMsgArray = QByteArray(data, errorLength);
-        QString msg(errorMsgArray);
+        QString msg = getNextStringSegement(&data);
         emit serverError(msg);
     } else if(messageCode == 1){
         qDebug() << "Server got the message";
     } else if(messageCode == 2){
+        //Take a move
         handleMove(data);
+    } else if(messageCode == 3){
+        //List of games
+        handleGameList(data);
+    } else if(messageCode == 4){
+        //Host was successfull
+        handleHostSuccess(data);
     }
 
 }
